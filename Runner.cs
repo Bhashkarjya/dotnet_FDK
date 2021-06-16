@@ -12,9 +12,9 @@ namespace FDK
         {
             return "Charles";
         }
-        public static void handle(Func<string,string> function)
+        public static void handle(Func<IRequestContext,string,string> function)
         {
-            function("Charles");
+            function(new RequestContext(), "Charles");
         }
 
         public static IPEndPoint getTCPConnectionPoint()

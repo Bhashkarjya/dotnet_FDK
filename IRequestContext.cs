@@ -3,21 +3,24 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace FDK
 {
     public interface IRequestContext
     {
         //Fn_Intent specifies how the caller intends the input message to be processed
-        string Fn_Intent();
-        string Content_Type();
-        string Request_URL();
-        string Method();
-        int StatusCode();
-
-        string RequestID();
-
-        CancellationToken AbortRequestAfterThisTime { get; set; }
+        string AppName();
+        string HttpRoute();
+        string CallID();
+        IContainerEnvironment Config();
+        IHeaderDictionary Header();
+        string Argument();
+        string Format();
+        CancellationToken cancellationToken();
+        string ExecutionType();
+        string RequestContentType();
+        string RequestURL();
 
     }
 }

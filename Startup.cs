@@ -13,14 +13,13 @@ namespace FDK
     public class Startup
     {
         // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             //adding services to the Dependency Injection Container
-            services.AddSingleton<IRequestContext, RequestContext>();
+            //services.AddSingleton<IRequestContext, RequestContext>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime.Adding the middlewares in the HTTP pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerfactory, IHostApplicationLifetime applicationLifetime)
         {
             if (env.IsDevelopment())
@@ -30,7 +29,7 @@ namespace FDK
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
+            /*app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
                 {
@@ -40,20 +39,24 @@ namespace FDK
                  {
                      await context.Response.WriteAsync(Example.InvokeWithParams("Charles"));
                  });
-            });
+            }); */
+
+            //This chunk of code gets implemented as soon as the app starts
+            //Binding the Kestrel web server to the UDS
             applicationLifetime.ApplicationStarted.Register(() => {
                 string UnixFilePath = "/tmp/api.sock";
                 Console.WriteLine("The Kestrel web server is binded to the "+UnixFilePath);
-                string SoftStorageFileOfTheUnixFilePath = "tmp/temp_api.sock";
+                string SoftStorageFileOfTheUnixFilePath = "/tmp/temp_api.sock";
                 Syscall.chmod(
                     SoftStorageFileOfTheUnixFilePath,
                     FilePermissions.S_IRUSR | FilePermissions.S_IWUSR | FilePermissions.S_IRGRP | FilePermissions.S_IWGRP 
                     | FilePermissions.S_IROTH | FilePermissions.S_IWOTH
                 );
-
-                Syscall.symlink(SoftStorageFileOfTheUnixFilePath,UnixFilePath);
-                Console.WriteLine("Unix Socket:", UnixFilePath);
+                //Syscall.symlink(SoftStorageFileOfTheUnixFilePath,UnixFilePath);
+                //Console.WriteLine("Unix Socket:" + UnixFilePath);
             });
+
+            //This chunk of code is implemented when the app closes
             //deleting the unix socket path when the application is closed
             applicationLifetime.ApplicationStopped.Register(() => 
             {
@@ -63,5 +66,3 @@ namespace FDK
         }
     }
 }
-
-//srwxr-xr-x 1 bhashkarjya bhashkarjya     0 Jun 15 00:51 api.sock

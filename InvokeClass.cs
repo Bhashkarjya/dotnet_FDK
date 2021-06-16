@@ -10,13 +10,13 @@ namespace FDK
         public static string InvokeHandler()
         {
             //Runner.getName();
-            string output = handle(Example.Invoke);
+            string output = handle(Example.HelloWorld);
             return output;
         }
 
-        public static string handle(Func<string> myMethod)
+        public static string handle(Func<IRequestContext,string> myMethod)
         {
-            return myMethod();
+            return myMethod(new RequestContext());
         }
     }
 }

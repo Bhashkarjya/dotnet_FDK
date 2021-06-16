@@ -7,12 +7,12 @@ namespace FDK
 {
     public static class Example
     {
-        public static string Invoke()
+        public static string HelloWorld(IRequestContext ctx)
         {
             return "Hello Everyone";
         }
 
-        public static string InvokeWithParams(string input)
+        public static string HelloWorldWithParams(string input)
         {
             return ($"Hello {input}");
         }

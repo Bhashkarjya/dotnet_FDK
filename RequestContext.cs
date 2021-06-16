@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,39 +9,51 @@ namespace FDK
 {
     public class RequestContext: IRequestContext
     {
-        public string Fn_Intent()
-        {
-            return "cloud-event";
-        }
-        public string Content_Type()
-        {
+        public string AppName(){
             return "";
         }
-        public string Request_URL()
+
+        public string HttpRoute()
         {
             return "";
         }
 
-        public string Method()
-        {
-            return "POST";
+        public string CallID(){
+            return "";
+        }
+        public IContainerEnvironment Config(){
+            return new ContainerEnvironment();
         }
 
-        public int StatusCode()
-        {
-            return 200;
+        public IHeaderDictionary Header(){
+            return Utils.GetFnSpecificHeaders();
         }
 
-        public string RequestID()
+        public string Argument()
+        {
+            return "";
+        }
+        public string Format(){
+            return "";
+        }
+
+        public CancellationToken cancellationToken()
+        {
+            return new CancellationToken();
+        }
+        public string ExecutionType()
         {
             return "";
         }
 
-        public CancellationToken AbortRequestAfterThisTime { get; set; }
-        
+        public string RequestContentType()
+        {
+            return "";
+        }
 
-
-
-
+        public string RequestURL()
+        {
+            return "";
+        }
     }
 }

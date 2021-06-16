@@ -13,28 +13,10 @@ namespace FDK
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
-            /*var host = new WebHostBuilder()
-                            .UseKestrel()
-                            .UseStartup<Startup>()
-                            .Build();
-                host.Run();*/
+            //The function handler
+            Console.WriteLine(InvokeClass.InvokeHandler());
+            //Create the web host
+            Server.CreateHostBuilder(args).Build().Run();
         }
-        
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.
-                    ConfigureKestrel(options =>
-                    {
-                        string UnixListener = new ContainerEnvironment().FN_LISTENER;
-                        string ListenerUnixSocketPath = UnixListener.Substring(5);
-                        options.ListenUnixSocket("/tmp/api.sock");
-                        Console.WriteLine("Unix Domain Socket connected");
-                        Console.WriteLine(ListenerUnixSocketPath);
-                    }).
-                    UseStartup<Startup>();
-                }); 
     }
 }
