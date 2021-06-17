@@ -1,32 +1,37 @@
 using System;
 using System.Threading;
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FDK
 {
     public class RequestContext: IRequestContext
     {
+        private readonly HttpRequest httpRequest;
+        private readonly IHeaderDictionary headers,fn_headers;
+
+        public RequestContext(IHttpContextAccessor contextAccessor){
+            httpRequest = contextAccessor.HttpContext.Request;
+            headers = contextAccessor.HttpContext.Request.Headers;
+            fn_headers = Header(headers);
+        }
         public string AppName(){
             return "";
         }
 
         public string HttpRoute()
         {
-            return "";
+            return fn_headers["Fn-Route"];
         }
 
         public string CallID(){
-            return "";
+            return fn_headers["Fn-CallID"];
         }
         public IContainerEnvironment Config(){
             return new ContainerEnvironment();
         }
 
-        public IHeaderDictionary Header(){
-            return Utils.GetFnSpecificHeaders();
+        public IHeaderDictionary Header(IHeaderDictionary headers){
+            return Utils.GetFnSpecificHeaders(headers);
         }
 
         public string Argument()
@@ -34,7 +39,7 @@ namespace FDK
             return "";
         }
         public string Format(){
-            return "";
+            return fn_headers["Fn-Format"];
         }
 
         public CancellationToken cancellationToken()
@@ -48,12 +53,12 @@ namespace FDK
 
         public string RequestContentType()
         {
-            return "";
+            return fn_headers["Fn-Content-Type"];
         }
 
         public string RequestURL()
         {
-            return "";
+            return fn_headers["Fn-RequestURL"];
         }
     }
 }

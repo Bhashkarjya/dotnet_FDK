@@ -3,6 +3,7 @@ using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace FDK
 {
@@ -14,7 +15,7 @@ namespace FDK
         }
         public static void handle(Func<IRequestContext,string,string> function)
         {
-            function(new RequestContext(), "Charles");
+            function(new RequestContext(new HttpContextAccessor()), "Charles");
         }
 
         public static IPEndPoint getTCPConnectionPoint()

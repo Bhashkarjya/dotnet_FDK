@@ -9,12 +9,11 @@ namespace FDK
 {
     public interface IRequestContext
     {
-        //Fn_Intent specifies how the caller intends the input message to be processed
         string AppName();
         string HttpRoute();
         string CallID();
         IContainerEnvironment Config();
-        IHeaderDictionary Header();
+        IHeaderDictionary Header(IHeaderDictionary headers);
         string Argument();
         string Format();
         CancellationToken cancellationToken();

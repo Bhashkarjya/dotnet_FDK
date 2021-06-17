@@ -16,7 +16,9 @@ namespace FDK
         public void ConfigureServices(IServiceCollection services)
         {
             //adding services to the Dependency Injection Container
-            //services.AddSingleton<IRequestContext, RequestContext>();
+            services.AddSingleton<IContainerEnvironment,ContainerEnvironment>();
+            services.AddSingleton<IRequestContext,RequestContext>();
+            services.AddScoped<IHttpContextAccessor,HttpContextAccessor>();
         }
 
         // This method gets called by the runtime.Adding the middlewares in the HTTP pipeline.
