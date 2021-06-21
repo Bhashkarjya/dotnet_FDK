@@ -39,14 +39,21 @@ namespace FDK
                 LogFile.CreateLogFile();
                 string UnixFilePath = new ContainerEnvironment().FN_LISTENER;
                 Console.WriteLine("The Kestrel web server is binded to the "+UnixFilePath);
-                string SoftStorageFileOfTheUnixFilePath = "/tmp/temp_api.sock";
+                string SoftStorageFileOfTheUnixFilePath = new ContainerEnvironment().SYMBOLIC_LINK;
+                Syscall.chmod(
+                    UnixFilePath,
+                    FilePermissions.S_IRUSR | FilePermissions.S_IWUSR | FilePermissions.S_IXUSR |
+                    FilePermissions.S_IRGRP | FilePermissions.S_IWGRP | FilePermissions.S_IXGRP |
+                    FilePermissions.S_IROTH | FilePermissions.S_IWOTH | FilePermissions.S_IXOTH
+                );
+                Syscall.symlink(UnixFilePath,SoftStorageFileOfTheUnixFilePath);
                 Syscall.chmod(
                     SoftStorageFileOfTheUnixFilePath,
-                    FilePermissions.S_IRUSR | FilePermissions.S_IWUSR | FilePermissions.S_IRGRP | FilePermissions.S_IWGRP 
-                    | FilePermissions.S_IROTH | FilePermissions.S_IWOTH
+                    FilePermissions.S_IRUSR | FilePermissions.S_IWUSR | FilePermissions.S_IXUSR |
+                    FilePermissions.S_IRGRP | FilePermissions.S_IWGRP | FilePermissions.S_IXGRP |
+                    FilePermissions.S_IROTH | FilePermissions.S_IWOTH | FilePermissions.S_IXOTH
                 );
-                //Syscall.symlink(SoftStorageFileOfTheUnixFilePath,UnixFilePath);
-                //Console.WriteLine("Unix Socket:" + UnixFilePath);
+                Console.WriteLine("Unix Socket:" + UnixFilePath);
             });
 
             //This chunk of code is implemented when the app closes
@@ -55,6 +62,7 @@ namespace FDK
             {
                 Console.WriteLine("Cleaning the sockets before shutting down the application");
                 File.Delete(new ContainerEnvironment().FN_LISTENER);
+                File.Delete(new ContainerEnvironment().SYMBOLIC_LINK);
                 //LogFile.CloseWriter();
             });
         }

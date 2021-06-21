@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FDK
 {
@@ -18,5 +15,7 @@ namespace FDK
         public Int32 FN_MEMORY { get; set; } = int.Parse(Environment.GetEnvironmentVariable("FN_MEMORY"));
         public Int32 FN_TMPSIZE { get; set; } = int.Parse(Environment.GetEnvironmentVariable("FN_TMPSIZE"));
         public string SOCKET_TYPE{get; set;} = "Unix";
+
+        public string SYMBOLIC_LINK{get; set;} = Environment.GetEnvironmentVariable("SYMLINK");
     }
 }

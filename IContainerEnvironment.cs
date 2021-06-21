@@ -30,6 +30,8 @@ namespace FDK
         //socket type is either Unix Domain Socket(UDS) or TCP. According to the contract we need to implement the UDS.
         string SOCKET_TYPE{get; set;}
 
+        string SYMBOLIC_LINK{get; set;}
+
 
 
     }
