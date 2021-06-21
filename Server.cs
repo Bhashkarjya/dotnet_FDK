@@ -10,16 +10,12 @@ namespace FDK
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.
-                    ConfigureKestrel(options =>
+                    webBuilder.UseStartup<Startup>()
+                    .ConfigureKestrel(options =>
                     {
-                        //string UnixListener = new ContainerEnvironment().FN_LISTENER;
-                        //string ListenerUnixSocketPath = UnixListener.Substring(5);
-                        options.ListenUnixSocket("/tmp/api.sock");
+                        options.ListenUnixSocket(new ContainerEnvironment().FN_LISTENER);
                         Console.WriteLine("Unix Domain Socket connected");
-                        //Console.WriteLine(ListenerUnixSocketPath);
-                    }).
-                    UseStartup<Startup>();
+                    });
                 });
         }
     }

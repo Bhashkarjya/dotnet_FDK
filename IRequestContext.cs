@@ -9,16 +9,15 @@ namespace FDK
 {
     public interface IRequestContext
     {
-        string AppName();
-        string HttpRoute();
+        string Intent();
         string CallID();
         IContainerEnvironment Config();
         IHeaderDictionary Header(IHeaderDictionary headers);
-        string Argument();
         string Format();
         CancellationToken cancellationToken();
+        DateTime Deadline();
         string ExecutionType();
-        string RequestContentType();
+        string ContentType();
         string RequestURL();
 
     }

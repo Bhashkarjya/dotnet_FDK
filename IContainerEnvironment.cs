@@ -27,8 +27,6 @@ namespace FDK
         Int32 FN_MEMORY { get; set; }
         //The maximum amount of data that can be written to /tmp
         Int32 FN_TMPSIZE { get; set; }
-
-        
         //socket type is either Unix Domain Socket(UDS) or TCP. According to the contract we need to implement the UDS.
         string SOCKET_TYPE{get; set;}
 

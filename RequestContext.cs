@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Microsoft.AspNetCore.Http;
+using Logging;
 
 namespace FDK
 {
@@ -9,22 +10,19 @@ namespace FDK
         private readonly HttpRequest httpRequest;
         private readonly IHeaderDictionary headers,fn_headers;
 
-        public RequestContext(IHttpContextAccessor contextAccessor){
-            httpRequest = contextAccessor.HttpContext.Request;
-            headers = contextAccessor.HttpContext.Request.Headers;
-            fn_headers = Header(headers);
-        }
-        public string AppName(){
-            return "";
-        }
-
-        public string HttpRoute()
-        {
-            return fn_headers["Fn-Route"];
+        public RequestContext(HttpContextAccessor contextAccessor){
+            try{
+                httpRequest = contextAccessor.HttpContext.Request;
+                headers = contextAccessor.HttpContext.Request.Headers;
+                fn_headers = Header(headers);
+            }
+            catch (NullReferenceException){
+                //LogFile.BuildTheLogFile(e);
+            }
         }
 
         public string CallID(){
-            return fn_headers["Fn-CallID"];
+            return fn_headers["Fn-Call-Id"];
         }
         public IContainerEnvironment Config(){
             return new ContainerEnvironment();
@@ -32,11 +30,6 @@ namespace FDK
 
         public IHeaderDictionary Header(IHeaderDictionary headers){
             return Utils.GetFnSpecificHeaders(headers);
-        }
-
-        public string Argument()
-        {
-            return "";
         }
         public string Format(){
             return fn_headers["Fn-Format"];
@@ -51,14 +44,25 @@ namespace FDK
             return "";
         }
 
-        public string RequestContentType()
+        public string ContentType()
         {
-            return fn_headers["Fn-Content-Type"];
+            return headers["Content-Type"];
         }
 
         public string RequestURL()
         {
-            return fn_headers["Fn-RequestURL"];
+            return fn_headers["Fn-Http-Request-Url"];
+        }
+
+        public DateTime Deadline()
+        {
+            return DateTime.Parse(fn_headers["Fn-Deadline"]);
+        }
+
+        public string Intent()
+        {
+            return fn_headers["Fn-Intent"];
+            //values will be application/cloudevent or application/json
         }
     }
 }

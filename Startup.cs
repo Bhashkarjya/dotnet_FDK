@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using System;
 using Mono.Unix.Native;
+using Logging;
 
 namespace FDK
 {
@@ -17,13 +18,14 @@ namespace FDK
         {
             //adding services to the Dependency Injection Container
             services.AddSingleton<IContainerEnvironment,ContainerEnvironment>();
-            services.AddSingleton<IRequestContext,RequestContext>();
-            services.AddScoped<IHttpContextAccessor,HttpContextAccessor>();
+            //services.AddSingleton<IRequestContext,RequestContext>();
+            services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
         }
 
         // This method gets called by the runtime.Adding the middlewares in the HTTP pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerfactory, IHostApplicationLifetime applicationLifetime)
         {
+            //Is the loggerfactory used for logging purposes??
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -31,22 +33,11 @@ namespace FDK
 
             app.UseRouting();
 
-            /*app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync(InvokeClass.InvokeHandler());
-                }); 
-                endpoints.MapGet("/input", async context =>
-                 {
-                     await context.Response.WriteAsync(Example.InvokeWithParams("Charles"));
-                 });
-            }); */
-
             //This chunk of code gets implemented as soon as the app starts
             //Binding the Kestrel web server to the UDS
             applicationLifetime.ApplicationStarted.Register(() => {
-                string UnixFilePath = "/tmp/api.sock";
+                LogFile.CreateLogFile();
+                string UnixFilePath = new ContainerEnvironment().FN_LISTENER;
                 Console.WriteLine("The Kestrel web server is binded to the "+UnixFilePath);
                 string SoftStorageFileOfTheUnixFilePath = "/tmp/temp_api.sock";
                 Syscall.chmod(
@@ -63,7 +54,8 @@ namespace FDK
             applicationLifetime.ApplicationStopped.Register(() => 
             {
                 Console.WriteLine("Cleaning the sockets before shutting down the application");
-                File.Delete("/tmp/api.sock");
+                File.Delete(new ContainerEnvironment().FN_LISTENER);
+                //LogFile.CloseWriter();
             });
         }
     }
