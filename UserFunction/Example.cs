@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FDK;
 
-namespace FDK
+namespace UserFunction
 {
-    public static class Example
+    public class Example
     {
-        public static string HelloWorld(IRequestContext ctx)
+        public static string HelloWorld()
         {
             return "Hello Everyone";
         }

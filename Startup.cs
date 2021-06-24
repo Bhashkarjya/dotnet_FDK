@@ -13,28 +13,37 @@ namespace FDK
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
+        private Func<IRequestContext,Func<string>> _function;
         public void ConfigureServices(IServiceCollection services)
         {
-            //adding services to the Dependency Injection Container
             services.AddSingleton<IContainerEnvironment,ContainerEnvironment>();
-            //services.AddSingleton<IRequestContext,RequestContext>();
             services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
+            //services.AddSingleton<IRequestContext,RequestContext>();
+            Console.WriteLine("Adding services in DI");
         }
 
-        // This method gets called by the runtime.Adding the middlewares in the HTTP pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerfactory, IHostApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerfactory, IHostApplicationLifetime applicationLifetime, IHttpContextAccessor httpContextAccessor)
         {
-            //Is the loggerfactory used for logging purposes??
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseRouting();
 
-            //This chunk of code gets implemented as soon as the app starts
-            //Binding the Kestrel web server to the UDS
+            try{
+                var a = httpContextAccessor.HttpContext;
+                Console.WriteLine(a);
+            }
+            catch(NullReferenceException)
+            {
+                Console.WriteLine("Request.Body is a null object");
+            }
+            Console.WriteLine("Adding Middlewares");
+            ConstructFunc obj = new ConstructFunc(InvokeClass._userMethod,httpContextAccessor);
+            _function = obj.final_function;
+
+            app.UseMiddleware<ResponseBody>(_function);
+            
             applicationLifetime.ApplicationStarted.Register(() => {
                 LogFile.CreateLogFile();
                 string UnixFilePath = new ContainerEnvironment().FN_LISTENER;
@@ -56,14 +65,11 @@ namespace FDK
                 Console.WriteLine("Unix Socket:" + UnixFilePath);
             });
 
-            //This chunk of code is implemented when the app closes
-            //deleting the unix socket path when the application is closed
             applicationLifetime.ApplicationStopped.Register(() => 
             {
                 Console.WriteLine("Cleaning the sockets before shutting down the application");
                 File.Delete(new ContainerEnvironment().FN_LISTENER);
                 File.Delete(new ContainerEnvironment().SYMBOLIC_LINK);
-                //LogFile.CloseWriter();
             });
         }
     }

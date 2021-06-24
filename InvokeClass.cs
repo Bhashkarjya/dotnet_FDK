@@ -1,24 +1,25 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 
 namespace FDK
 {
-    public static class InvokeClass
+    public class InvokeClass
     {
-       // private readonly IHttpContextAccessor contextAccessor;
-        public static string InvokeHandler()
+        public static IServiceCollection services;
+        public static Func<string> _userMethod;
+        public static void HandlerFunc(Func<string> userMethod)
         {
-            //Runner.getName();
-            string output = handle(Example.HelloWorld);
-            return output;
+            //This is the entry point where the user function will first enter the FDK
+            string output = userMethod();
+            Console.WriteLine(output);
+            _userMethod = userMethod;
+            Server.CreateHostBuilder(new ContainerEnvironment()).Build().Run();
+            //return output;
         }
 
-        public static string handle(Func<IRequestContext,string> myMethod)
-        {
-            return myMethod(new RequestContext(new HttpContextAccessor()));
-        }
+        //Call this function to get the user function code
     }
 }

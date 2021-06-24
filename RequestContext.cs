@@ -10,7 +10,7 @@ namespace FDK
         private readonly HttpRequest httpRequest;
         private readonly IHeaderDictionary headers,fn_headers;
 
-        public RequestContext(HttpContextAccessor contextAccessor){
+        public RequestContext(IHttpContextAccessor contextAccessor){
             try{
                 httpRequest = contextAccessor.HttpContext.Request;
                 headers = contextAccessor.HttpContext.Request.Headers;

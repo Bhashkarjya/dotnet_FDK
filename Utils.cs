@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using Microsoft.AspNetCore.Http;
 
 namespace FDK
@@ -14,6 +15,7 @@ namespace FDK
             IHeaderDictionary FnDictionary = new HeaderDictionary();
             foreach(var item in headers)
             {
+                Console.WriteLine(item.Key+":"+item.Value);
                 if(item.Key.StartsWith(PREFIX))
                 {
                     FnDictionary.Add(item.Key,item.Value);
@@ -21,5 +23,18 @@ namespace FDK
             }
             return new HeaderDictionary();
         }
+
+        public static IPEndPoint getTCPConnectionPoint()
+        {
+            IPEndPoint endpoint = new IPEndPoint(0x2414188f, 8080);
+            return endpoint;
+        }
+
+        public static void handle(Func<IRequestContext,string,string> function)
+        {
+            function(new RequestContext(new HttpContextAccessor()), "Charles");
+        }
     }
 }
+
+
