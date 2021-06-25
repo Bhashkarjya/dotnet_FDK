@@ -18,7 +18,8 @@ namespace FDK
         {
             services.AddSingleton<IContainerEnvironment,ContainerEnvironment>();
             services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
-            //services.AddSingleton<IRequestContext,RequestContext>();
+            services.AddSingleton<IRequestContext,RequestContext>();
+            services.AddSingleton<IConstructFunc,ConstructFunc>();
             Console.WriteLine("Adding services in DI");
         }
 
@@ -39,10 +40,8 @@ namespace FDK
                 Console.WriteLine("Request.Body is a null object");
             }
             Console.WriteLine("Adding Middlewares");
-            ConstructFunc obj = new ConstructFunc(InvokeClass._userMethod,httpContextAccessor);
-            _function = obj.final_function;
-
-            app.UseMiddleware<ResponseBody>(_function);
+            
+            //app.UseMiddleware<ResponseBody>();
             
             applicationLifetime.ApplicationStarted.Register(() => {
                 LogFile.CreateLogFile();

@@ -13,7 +13,7 @@ namespace FDK
                     webBuilder.UseStartup<Startup>()
                     .ConfigureKestrel(options =>
                     {
-                        options.ListenUnixSocket(ctnEnv.FN_LISTENER);
+                        //options.ListenUnixSocket(ctnEnv.FN_LISTENER);
                         Console.WriteLine("Unix Domain Socket connected");
                     });
                 });

@@ -11,6 +11,7 @@ namespace FDK
         private readonly IHeaderDictionary headers,fn_headers;
 
         public RequestContext(IHttpContextAccessor contextAccessor){
+            Console.WriteLine("Added to the DI");
             try{
                 httpRequest = contextAccessor.HttpContext.Request;
                 headers = contextAccessor.HttpContext.Request.Headers;
@@ -35,10 +36,7 @@ namespace FDK
             return fn_headers["Fn-Format"];
         }
 
-        public CancellationToken cancellationToken()
-        {
-            return new CancellationToken();
-        }
+        public CancellationToken cancellationToken{get; set;}
         public string ExecutionType()
         {
             return "";

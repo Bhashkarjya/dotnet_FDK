@@ -11,7 +11,7 @@ namespace FDK
         IContainerEnvironment Config();
         IHeaderDictionary Header(IHeaderDictionary headers);
         string Format();
-        CancellationToken cancellationToken();
+        CancellationToken cancellationToken{get; set;}
         DateTime Deadline();
         string ExecutionType();
         string ContentType();

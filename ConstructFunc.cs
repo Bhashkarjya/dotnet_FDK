@@ -1,28 +1,29 @@
 using System;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace FDK
 {
-    public class ConstructFunc
+    public class ConstructFunc: IConstructFunc
     {
-        public Func<string> _function;
+        private Func<string> _function;
         private IHttpContextAccessor _httpContextAccessor;
 
         public Func<IRequestContext,Func<string>> final_function;
-        public ConstructFunc(Func<string> function, IHttpContextAccessor httpContextAccessor)
+        public ConstructFunc(IHttpContextAccessor httpContextAccessor)
         {
-            _function = function;
+            _function = InvokeClass._userMethod;
             _httpContextAccessor = httpContextAccessor;
-            final_function = NewFunction();
+            //final_function = NewFunction();
         }
 
-        private Func<IRequestContext,Func<string>> NewFunction()
+        public Func<IRequestContext,Func<string>> NewFunction()
         {
             IRequestContext ctx = new RequestContext(_httpContextAccessor);
             Func<IRequestContext,Func<string>> output = MethodFunc;
             return output;
         }
-        private Func<string> MethodFunc(IRequestContext ctx)
+        public Func<string> MethodFunc(IRequestContext ctx)
         {
             return _function;
         }
