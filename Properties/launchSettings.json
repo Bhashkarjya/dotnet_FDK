@@ -18,9 +18,9 @@
     "FDK": {
       "commandName": "Project",
       "launchBrowser": true,
+      "externalUrlConfiguration": true,
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "FN_LISTENER": "unix:/tmp/api.sock",
         "FN_ID":"123",
         "FN_NAME":"Happy_Smurfs",

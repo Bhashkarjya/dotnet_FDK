@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "zjmXnVJaPvPeV3H5x7emIqQLMwpG//xEQ1A1HhxDeqR4gAWZkuXGHjfMWeP1N+Egx3UBJPmt0/NFeKzQoUcrWw==",
+  "dgSpecHash": "We09iLzqLsW/oJsXsjlYCrsBSWHgtb2BTpu+FhWAHe/vLJPm8JQXgjbPoeKTGwO3ayttwYmkIkVC+IdmIPTr9w==",
   "success": true,
-  "projectFilePath": "/home/bhashkarjya/FDK/FDK.csproj",
+  "projectFilePath": "/Users/gaursain/dotnet-fdk/dotnet_FDK/FDK.csproj",
   "expectedPackageFiles": [
-    "/home/bhashkarjya/.nuget/packages/mono.posix-4.5/4.5.0/mono.posix-4.5.4.5.0.nupkg.sha512"
+    "/Users/gaursain/.nuget/packages/mono.posix-4.5/4.5.0/mono.posix-4.5.4.5.0.nupkg.sha512",
+    "/Users/gaursain/.nuget/packages/microsoft.netcore.app.ref/3.1.0/microsoft.netcore.app.ref.3.1.0.nupkg.sha512",
+    "/Users/gaursain/.nuget/packages/microsoft.aspnetcore.app.ref/3.1.10/microsoft.aspnetcore.app.ref.3.1.10.nupkg.sha512"
   ],
   "logs": [
     {

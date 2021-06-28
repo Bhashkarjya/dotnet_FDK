@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using System;
 using Mono.Unix.Native;
-using Logging;
 
 namespace FDK
 {
@@ -44,7 +43,7 @@ namespace FDK
             //app.UseMiddleware<ResponseBody>();
             
             applicationLifetime.ApplicationStarted.Register(() => {
-                LogFile.CreateLogFile();
+                // Logger.CreateLogFile();
                 string UnixFilePath = new ContainerEnvironment().FN_LISTENER;
                 Console.WriteLine("The Kestrel web server is binded to the "+UnixFilePath);
                 string SoftStorageFileOfTheUnixFilePath = new ContainerEnvironment().SYMBOLIC_LINK;

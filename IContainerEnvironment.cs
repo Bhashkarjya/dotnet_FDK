@@ -23,10 +23,10 @@ namespace FDK
         //the platform will guarantee that this directory is writable to the function.
         //FDKs must not write any other data than the unix socket to this directory.
         string FN_LISTENER { get; set; }
-        //	The number of MB of ram allocated to the container
-        Int32 FN_MEMORY { get; set; }
-        //The maximum amount of data that can be written to /tmp
-        Int32 FN_TMPSIZE { get; set; }
+//         //	The number of MB of ram allocated to the container
+//         Int32 FN_MEMORY { get; set; }
+//         //The maximum amount of data that can be written to /tmp
+//         Int32 FN_TMPSIZE { get; set; }
         //socket type is either Unix Domain Socket(UDS) or TCP. According to the contract we need to implement the UDS.
         string SOCKET_TYPE{get; set;}
 
