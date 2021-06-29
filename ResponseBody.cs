@@ -28,7 +28,6 @@ namespace  FDK
             Console.WriteLine("This middleware is triggered when we invoke the endpoint");
             context.Response.WriteAsync("Response Body Middleware has been triggered");
             var ExecutionResult = UserFunctionRun();
-            
         }
 
         public void CreateResponseBody(HttpResponse response)

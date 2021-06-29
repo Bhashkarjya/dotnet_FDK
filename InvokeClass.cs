@@ -3,19 +3,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace FDK
 {
     public class InvokeClass
     {
         public static IServiceCollection services;
-        public static Func<string> _userMethod;
-        public static void HandlerFunc(Func<string> userMethod)
+
+        public static Type _functionType;
+        public static object _functionInstance;
+
+        public static MethodInfo _userFunction;
+        public static void HandlerFunc(Type functionType, object functionInstance, MethodInfo userFunction)
         {
             //This is the entry point where the user function will first enter the FDK
-            string output = userMethod();
-            Console.WriteLine(output);
-            _userMethod = userMethod;
+            _functionType = functionType;
+            _functionInstance = functionInstance;
+            _userFunction = userFunction;
+            var output = userFunction.Invoke(functionInstance, new string[0]);
+            Console.WriteLine("Reflection: {0}",output);
             Server.CreateHostBuilder(new ContainerEnvironment()).Build().Run();
             //return output;
         }

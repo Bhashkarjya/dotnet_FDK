@@ -21,7 +21,7 @@ namespace FDK
             Console.WriteLine("Adding services in DI");
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerfactory, IHostApplicationLifetime applicationLifetime, IHttpContextAccessor httpContextAccessor)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerfactory, IHostApplicationLifetime applicationLifetime, IHttpContextAccessor httpContextAccessor, IContainerEnvironment containerEnvironment)
         {
             if (env.IsDevelopment())
             {
@@ -39,13 +39,13 @@ namespace FDK
             }
             //Console.WriteLine("Adding Middlewares");
             
-            //app.UseMiddleware<ResponseBody>();
+            app.UseMiddleware<ResponseBody>();
             
             applicationLifetime.ApplicationStarted.Register(() => {
                 // Logger.CreateLogFile();
-                string UnixFilePath = new ContainerEnvironment().FN_LISTENER;
+                string UnixFilePath = containerEnvironment.FN_LISTENER;
                 Console.WriteLine("The Kestrel web server is binded to the "+UnixFilePath);
-                string SoftStorageFileOfTheUnixFilePath = new ContainerEnvironment().SYMBOLIC_LINK;
+                string SoftStorageFileOfTheUnixFilePath = containerEnvironment.SYMBOLIC_LINK;
                 Syscall.chmod(
                     UnixFilePath,
                     FilePermissions.S_IRUSR | FilePermissions.S_IWUSR | FilePermissions.S_IXUSR |
@@ -65,8 +65,8 @@ namespace FDK
             applicationLifetime.ApplicationStopped.Register(() => 
             {
                 Console.WriteLine("Cleaning the sockets before shutting down the application");
-                File.Delete(new ContainerEnvironment().FN_LISTENER);
-                File.Delete(new ContainerEnvironment().SYMBOLIC_LINK);
+                File.Delete(containerEnvironment.FN_LISTENER);
+                File.Delete(containerEnvironment.SYMBOLIC_LINK);
             });
         }
     }
