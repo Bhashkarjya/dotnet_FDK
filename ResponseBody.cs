@@ -17,7 +17,7 @@ namespace  FDK
         public ResponseBody(RequestDelegate next,IHttpContextAccessor httpContextAccessor,IRequestContext ctx)
         {
             ConstructFunc obj = new ConstructFunc(httpContextAccessor);
-            _function = obj.final_function;
+            //_function = obj.final_function;
             _next = next;
             _ctx = ctx;
             _httpContextAccessor = httpContextAccessor;

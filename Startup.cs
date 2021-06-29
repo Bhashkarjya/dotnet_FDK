@@ -13,7 +13,6 @@ namespace FDK
 {
     public class Startup
     {
-        private Func<IRequestContext,Func<string>> _function;
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IContainerEnvironment,ContainerEnvironment>();
@@ -33,13 +32,13 @@ namespace FDK
 
             try{
                 var a = httpContextAccessor.HttpContext;
-                Console.WriteLine(a);
+                //Console.WriteLine(a);
             }
             catch(NullReferenceException)
             {
                 Console.WriteLine("Request.Body is a null object");
             }
-            Console.WriteLine("Adding Middlewares");
+            //Console.WriteLine("Adding Middlewares");
             
             //app.UseMiddleware<ResponseBody>();
             
