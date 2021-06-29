@@ -1,12 +1,11 @@
 using System;
-using System.Reflection;
 
 namespace FDK
 {
     public interface IConstructFunc
     {
-        Func<IRequestContext,MethodInfo> NewFunction();
+        Func<IRequestContext,Func<string>> NewFunction();
 
-        MethodInfo MethodFunc(IRequestContext ctx);
+        Func<string> MethodFunc(IRequestContext ctx);
     }
 }

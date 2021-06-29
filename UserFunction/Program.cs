@@ -8,16 +8,11 @@ namespace UserFunction
     {
         public static void Main(string[] args)
         {
-            Assembly executingAssembly = Assembly.GetExecutingAssembly();
-            Type FunctionType = executingAssembly.GetType("UserFunction.Example");
-            object FunctionInstance = Activator.CreateInstance(FunctionType);
-            MethodInfo UserMethod = FunctionType.GetMethod("HelloWorld");
-            //string[] parameters = new string[0];
-            //object output = UserMethod.Invoke(FunctionInstance,parameters);
-            InvokeClass.HandlerFunc(FunctionType,FunctionInstance,UserMethod);
-
-            //Previously Invoke was handled in this manner
-            //InvokeClass.HandlerFunc(Example.HelloWorld);
+          try {
+            InvokeClass.HandlerFunc(Example.HelloWorld);
+          } catch (Exception e) {
+            Console.WriteLine("{0}\n{1}\n{2}", e.ToString(), e.Message, e.Source);
+          }
         }
     }
 }

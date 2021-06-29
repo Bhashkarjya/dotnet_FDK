@@ -1,13 +1,33 @@
 using System;
 using System.Text;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 
-namespace Logging
+namespace FDK.Log
 {
-    public static class LogFile
+    public static class Logger
     {
         private static string _filepath = "./Logging/ErrorLog.txt";
         private static StreamWriter writer;
+
+        public static void EnableFromHeaders(IHeaderDictionary headers) {
+          
+          string framer = Environment.GetEnvironmentVariable("FN_LOGFRAME_NAME");
+          if (framer.Length == 0) {
+            return;
+          }
+
+          string valueSrc = Environment.GetEnvironmentVariable("FN_LOGFRAME_HDR");
+          if (valueSrc.Length == 0) {
+            return;
+          }
+
+          string framerHeaderValue = headers[valueSrc];
+          if (framerHeaderValue.Length != 0) {
+            Console.WriteLine("\n{0}={1}", framer, framerHeaderValue);
+            Console.Error.WriteLine("\n{0}={1}", framer, framerHeaderValue);
+          }
+        }
 
         public static void CreateLogFile()
         {

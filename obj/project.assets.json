@@ -33,19 +33,19 @@
     ]
   },
   "packageFolders": {
-    "/home/bhashkarjya/.nuget/packages/": {}
+    "/Users/gaursain/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/bhashkarjya/FDK/FDK.csproj",
+      "projectUniqueName": "/Users/gaursain/dotnet-fdk/dotnet_FDK/FDK.csproj",
       "projectName": "FDK",
-      "projectPath": "/home/bhashkarjya/FDK/FDK.csproj",
-      "packagesPath": "/home/bhashkarjya/.nuget/packages/",
-      "outputPath": "/home/bhashkarjya/FDK/obj/",
+      "projectPath": "/Users/gaursain/dotnet-fdk/dotnet_FDK/FDK.csproj",
+      "packagesPath": "/Users/gaursain/.nuget/packages/",
+      "outputPath": "/Users/gaursain/dotnet-fdk/dotnet_FDK/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/bhashkarjya/.nuget/NuGet/NuGet.Config"
+        "/Users/gaursain/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
@@ -55,6 +55,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -66,6 +67,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Mono.Posix-4.5": {
             "target": "Package",
@@ -82,6 +84,16 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[3.1.10, 3.1.10]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[3.1.0, 3.1.0]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -90,7 +102,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.410/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.202/RuntimeIdentifierGraph.json"
       }
     }
   },

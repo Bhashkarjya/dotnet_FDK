@@ -1,25 +1,22 @@
 using System;
 using System.Threading;
 using Microsoft.AspNetCore.Http;
-using Logging;
 
 namespace FDK
 {
     public class RequestContext: IRequestContext
     {
         private readonly HttpRequest httpRequest;
-        private readonly IHeaderDictionary headers,fn_headers;
+        private readonly IHeaderDictionary headers, fn_headers;
 
         public RequestContext(IHttpContextAccessor contextAccessor){
-            Console.WriteLine("Added to the DI");
-            try{
-                httpRequest = contextAccessor.HttpContext.Request;
-                headers = contextAccessor.HttpContext.Request.Headers;
-                fn_headers = Header(headers);
-            }
-            catch (NullReferenceException){
-                //LogFile.BuildTheLogFile(e);
-            }
+            httpRequest = contextAccessor.HttpContext.Request;
+            headers = contextAccessor.HttpContext.Request.Headers;
+
+            // Start logging this request from environment variables and headers
+            FDK.Log.Logger.EnableFromHeaders(headers);
+
+            fn_headers = Header(headers);
         }
 
         public string CallID(){
