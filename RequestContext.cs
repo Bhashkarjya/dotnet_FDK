@@ -10,13 +10,13 @@ namespace FDK
         private readonly IHeaderDictionary headers, fn_headers;
 
         public RequestContext(IHttpContextAccessor contextAccessor){
-            Console.WriteLine("Request Context says Hello");
             try{
                 httpRequest = contextAccessor.HttpContext.Request;
                 headers = contextAccessor.HttpContext.Request.Headers;
                 // Start logging this request from environment variables and headers
                 FDK.Log.Logger.EnableFromHeaders(headers);
                 fn_headers = Header(headers);
+                Console.WriteLine("Response Body worked");
             }
             catch(NullReferenceException e)
             {

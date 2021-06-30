@@ -18,10 +18,16 @@ namespace FDK
             services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
             services.AddSingleton<IRequestContext,RequestContext>();
             services.AddSingleton<IConstructFunc,ConstructFunc>();
-            Console.WriteLine("Adding services in DI");
+            //Console.WriteLine("Adding services in DI");
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerfactory, IHostApplicationLifetime applicationLifetime, IHttpContextAccessor httpContextAccessor, IContainerEnvironment containerEnvironment)
+        public void Configure(IApplicationBuilder app, 
+                              IWebHostEnvironment env, 
+                              ILoggerFactory loggerfactory, 
+                              IHostApplicationLifetime applicationLifetime, 
+                              IHttpContextAccessor httpContextAccessor, 
+                              IContainerEnvironment containerEnvironment,
+                              IConstructFunc constructFunc)
         {
             if (env.IsDevelopment())
             {
@@ -31,20 +37,19 @@ namespace FDK
 
             try{
                 var a = httpContextAccessor.HttpContext;
+                Console.WriteLine(a.Request);
                 //Console.WriteLine(a);
             }
             catch(NullReferenceException)
             {
                 Console.WriteLine("Request.Body is a null object");
             }
-            //Console.WriteLine("Adding Middlewares");
-            
-            app.UseMiddleware<ResponseBody>();
+            app.UseMiddleware<ResponseMiddleware>();
             
             applicationLifetime.ApplicationStarted.Register(() => {
                 // Logger.CreateLogFile();
                 string UnixFilePath = containerEnvironment.FN_LISTENER;
-                Console.WriteLine("The Kestrel web server is binded to the "+UnixFilePath);
+                //Console.WriteLine("The Kestrel web server is binded to the "+UnixFilePath);
                 string SoftStorageFileOfTheUnixFilePath = containerEnvironment.SYMBOLIC_LINK;
                 Syscall.chmod(
                     UnixFilePath,
@@ -59,7 +64,6 @@ namespace FDK
                     FilePermissions.S_IRGRP | FilePermissions.S_IWGRP | FilePermissions.S_IXGRP |
                     FilePermissions.S_IROTH | FilePermissions.S_IWOTH | FilePermissions.S_IXOTH
                 );
-                Console.WriteLine("Unix Socket:" + UnixFilePath);
             });
 
             applicationLifetime.ApplicationStopped.Register(() => 

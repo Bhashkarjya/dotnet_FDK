@@ -12,8 +12,7 @@ namespace UserFunction
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
             Type functionType = executingAssembly.GetType("UserFunction.Example");
             object functionInstance = Activator.CreateInstance(functionType);
-            MethodInfo userFunction = functionType.GetMethod("HelloWorld");
-            InvokeClass.HandlerFunc(functionType,functionInstance,userFunction);
+            InvokeClass.HandlerFunc(functionType,functionInstance);
           } catch (Exception e) {
             Console.WriteLine("{0}\n{1}\n{2}", e.ToString(), e.Message, e.Source);
           }

@@ -9,10 +9,12 @@ namespace FDK
     {
         private MethodInfo _function;
         private IHttpContextAccessor _httpContextAccessor;
+        private IRequestContext _ctx;
 
         public Func<IRequestContext,MethodInfo> final_function;
-        public ConstructFunc(IHttpContextAccessor httpContextAccessor)
+        public ConstructFunc(IHttpContextAccessor httpContextAccessor, IRequestContext ctx)
         {
+            _ctx = ctx;
             _function = InvokeClass._userFunction;
             _httpContextAccessor = httpContextAccessor;
             final_function = NewFunction();
@@ -20,7 +22,6 @@ namespace FDK
 
         public Func<IRequestContext,MethodInfo> NewFunction()
         {
-            IRequestContext ctx = new RequestContext(_httpContextAccessor);
             Func<IRequestContext,MethodInfo> output = MethodFunc;
             return output;
         }
