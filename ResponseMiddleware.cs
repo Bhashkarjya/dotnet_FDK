@@ -30,7 +30,7 @@ namespace  FDK
             var ExecutionResult = UserFunctionRun();
             var result = ClassifyResult.Create(ExecutionResult);
             await result.WriteResult(context.Response);
-            await context.Response.WriteAsync((string)ExecutionResult);
+            //await context.Response.WriteAsync((string)ExecutionResult);
         }
 
         private object UserFunctionRun()

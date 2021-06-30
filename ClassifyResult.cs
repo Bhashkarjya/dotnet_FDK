@@ -17,12 +17,12 @@ namespace FDK
                 case string str:
                 {
                     Console.WriteLine("String");
-                    return null;
+                    return new RawResult(str);
                 }
                 case Stream stream:
                 {
                     Console.WriteLine("Stream");
-                    return null;
+                    return new StreamResult(stream);
                 }
                 default:
                 {
