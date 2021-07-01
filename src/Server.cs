@@ -26,7 +26,7 @@ namespace FDK
                             File.Delete(ctnEnv.SYMBOLIC_LINK);
                         }
                         Console.WriteLine("FN_LISTENER: {0}", ctnEnv.FN_LISTENER);
-                        //options.ListenUnixSocket(ctnEnv.FN_LISTENER);
+                        options.ListenUnixSocket(ctnEnv.FN_LISTENER);
                         Console.WriteLine("Unix Domain Socket connected");
                     });
                 });

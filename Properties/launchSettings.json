@@ -19,7 +19,6 @@
       "commandName": "Project",
       "launchBrowser": true,
       "externalUrlConfiguration": true,
-      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "FN_LISTENER": "unix:/tmp/api.sock",
         "FN_ID":"123",

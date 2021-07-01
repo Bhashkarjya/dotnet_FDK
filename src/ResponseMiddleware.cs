@@ -50,14 +50,13 @@ namespace  FDK
 
         private TimeSpan? CalculateTimeLeft()
         {
-            // var deadLine = _ctx.Deadline();
-            // if(deadLine == null)
-            //     return null;
-            // var timeLeft = deadLine - DateTime.Now;
-            // if(timeLeft.TotalSeconds < 0)
-            //     return null;
-            // return timeLeft;
-            return null;
+            var deadLine = _ctx.Deadline();
+            if(deadLine == null)
+                return null;
+            var timeLeft = deadLine - DateTime.Now;
+            if(timeLeft.TotalSeconds < 0)
+                return null;
+            return timeLeft;
         }
     }
 }
