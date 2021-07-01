@@ -27,9 +27,9 @@ namespace  FDK
         public async Task InvokeAsync(HttpContext context)
         {
             //await context.Response.WriteAsync("Response Body Middleware has been triggered");
-            var ExecutionResult = UserFunctionRun();
-            var result = ClassifyResult.Create(ExecutionResult);
-            await result.WriteResult(context.Response);
+            var functionExecutionResult = UserFunctionRun();
+            await ClassifyResult.Create(functionExecutionResult,context);
+            //await result.WriteResult(context.Response);
             //await context.Response.WriteAsync((string)ExecutionResult);
         }
 
@@ -41,11 +41,11 @@ namespace  FDK
             if(timeLeft == null)
             {
                 _httpContextAccessor.HttpContext.Response.StatusCode = StatusCodes.Status200OK;
-                return InvokeClass.GetOutput();
+                return InvokeClass.RunUserFunction();
             }
             tokenSource.Cancel();
             _httpContextAccessor.HttpContext.Response.StatusCode = StatusCodes.Status504GatewayTimeout;
-            return InvokeClass.GetOutput();
+            return InvokeClass.RunUserFunction();
         }
 
         private TimeSpan? CalculateTimeLeft()

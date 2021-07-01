@@ -1,34 +1,38 @@
 using System;
 using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace FDK
 {
     public abstract class ClassifyResult{
-        public static ConstructResult Create(object result)
+        public static async Task Create(object result, HttpContext context)
         {
-            Console.WriteLine(result);
-            switch(result)
+
+            if(result.GetType() == typeof(string))
             {
-                case ConstructResult res:
-                {
-                    Console.WriteLine("FnResult");
-                    return res;
-                }
-                case string str:
-                {
-                    Console.WriteLine("String");
-                    return new RawResult(str);
-                }
-                case Stream stream:
-                {
-                    Console.WriteLine("Stream");
-                    return new StreamResult(stream);
-                }
-                default:
-                {
-                    Console.WriteLine("JSON");
-                    return null;
-                }
+                //Console.WriteLine("Success");
+                string str = (string)result;
+                ConstructResult res = new RawResult(str);
+                await res.WriteResult(context.Response);
+
+            }
+            else if(result.GetType() == typeof(ConstructResult))
+            {
+                ConstructResult res = (ConstructResult)result;
+                await res.WriteResult(context.Response);
+            }
+            else if(result.GetType() == typeof(Stream))
+            {
+                Stream stream = (Stream)result;
+                ConstructResult res = new StreamResult(stream);
+                await res.WriteResult(context.Response);
+            }
+            else
+            {
+                JsonResult res = new JsonResult(result);
+                await res.WriteResult(context.Response);
             }
         }
     }

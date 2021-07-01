@@ -46,7 +46,7 @@ namespace FDK
         }
 
         //Call this function to get the user function code
-        public static object GetOutput()
+        public static object RunUserFunction()
         {
             if(_parameters.Length==0)
             {
