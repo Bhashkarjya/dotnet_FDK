@@ -3,7 +3,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Mono.Posix-4.5" Version="4.5.0"/>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" />
   </ItemGroup>
 </Project>

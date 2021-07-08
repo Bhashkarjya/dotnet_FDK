@@ -36,9 +36,9 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
-            "Mono.Posix-4.5": {
+            "Mono.Posix.NETStandard": {
               "target": "Package",
-              "version": "[4.5.0, )"
+              "version": "[1.0.0, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",

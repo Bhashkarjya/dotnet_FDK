@@ -10,12 +10,14 @@ namespace FDK
         public string FN_APP_NAME{get; set;} = Environment.GetEnvironmentVariable("FN_APP_NAME");
 
         public string FN_FORMAT{get; set;} = Environment.GetEnvironmentVariable("FN_FORMAT");
-        public string FN_LISTENER { get; set; } = Environment.GetEnvironmentVariable("FN_LISTENER").Substring(5);
+        public string FN_LISTENER { get; set; } = Environment.GetEnvironmentVariable("FN_LISTENER").Substring(5); 
         
         // public Int32 FN_MEMORY { get; set; } = int.Parse(Environment.GetEnvironmentVariable("FN_MEMORY"));
         // public Int32 FN_TMPSIZE { get; set; } = int.Parse(Environment.GetEnvironmentVariable("FN_TMPSIZE"));
         public string SOCKET_TYPE{get; set;} = "Unix";
 
         public string SYMBOLIC_LINK{get; set;} = Environment.GetEnvironmentVariable("SYMLINK");
+        // public int FN_MEMORY{get; set;} = int.Parse(Environment.GetEnvironmentVariable("FN_MEMORY"));
+        // public int FN_TMPSIZE{get; set;} = int.Parse(Environment.GetEnvironmentVariable("FN_TMPSIZE"));
     }
 }

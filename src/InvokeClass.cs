@@ -22,10 +22,11 @@ namespace FDK
             _functionType = functionType;
             //Getting an array of methods
             MethodInfo[] methodInfos =  _functionType.GetMethods();
+            //Console.WriteLine(functionName);
             foreach(MethodInfo val in methodInfos)
             {
-                //We only want the name of the user-defined method
-                if(val.Name != "GetType" && val.Name!= "ToString" && val.Name!="Equals" && val.Name!="GetHashCode")
+                //will create a shell script to change the name of HelloWorld to the name of the function
+                if(val.Name =="HelloWorld")
                 {
                     functionName = val.Name;
                     break;

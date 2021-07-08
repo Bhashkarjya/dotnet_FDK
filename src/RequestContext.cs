@@ -6,16 +6,21 @@ namespace FDK
 {
     public class RequestContext: IRequestContext
     {
-        private readonly HttpRequest httpRequest;
+        private readonly HttpRequest _httpRequest;
         private readonly IHeaderDictionary headers, fn_headers;
 
-        public RequestContext(IHttpContextAccessor contextAccessor){
+        public RequestContext(HttpContext context){
             try{
-                httpRequest = contextAccessor.HttpContext.Request;
-                headers = contextAccessor.HttpContext.Request.Headers;
+                _httpRequest = context.Request;
+                headers = _httpRequest.Headers;
+                Console.WriteLine(headers);
                 // Start logging this request from environment variables and headers
-                FDK.Log.Logger.EnableFromHeaders(headers);
-                fn_headers = Header(headers);
+                //FDK.Log.Logger.EnableFromHeaders(headers);
+                fn_headers = Utils.GetFnSpecificHeaders(headers);
+                foreach(var h in fn_headers)
+                {
+                    Console.WriteLine(h.Key+":"+h.Value);
+                }
                 Console.WriteLine("Response Body worked");
             }
             catch(NullReferenceException e)

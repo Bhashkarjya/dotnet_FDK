@@ -17,6 +17,7 @@ namespace FDK
         }
         public override async Task WriteResultBody(HttpResponse response)
         {
+            Console.WriteLine("has the code reached this part");
             await response.WriteAsync(_res,Encoding);
         }
     }

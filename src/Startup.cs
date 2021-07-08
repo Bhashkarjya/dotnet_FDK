@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using System;
 using Mono.Unix.Native;
+using System.Threading;
 
 namespace FDK
 {
@@ -14,10 +15,10 @@ namespace FDK
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IContainerEnvironment,ContainerEnvironment>();
             services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
-            services.AddSingleton<IRequestContext,RequestContext>();
-            services.AddSingleton<IConstructFunc,ConstructFunc>();
+            services.AddSingleton<IContainerEnvironment,ContainerEnvironment>();
+            //services.AddScoped<IRequestContext,RequestContext>();
+            //services.AddSingleton<IConstructFunc,ConstructFunc>();
             //Console.WriteLine("Adding services in DI");
         }
 
@@ -26,37 +27,20 @@ namespace FDK
                               ILoggerFactory loggerfactory, 
                               IHostApplicationLifetime applicationLifetime, 
                               IHttpContextAccessor httpContextAccessor, 
-                              IContainerEnvironment containerEnvironment,
-                              IConstructFunc constructFunc)
+                              IContainerEnvironment containerEnvironment
+                            //   IConstructFunc constructFunc
+                              )
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             app.UseRouting();
-
-            try{
-                var a = httpContextAccessor.HttpContext;
-                Console.WriteLine(a.Request);
-                //Console.WriteLine(a);
-            }
-            catch(NullReferenceException)
-            {
-                Console.WriteLine("Request.Body is a null object");
-            }
             app.UseMiddleware<ResponseMiddleware>();
             
             applicationLifetime.ApplicationStarted.Register(() => {
-                // Logger.CreateLogFile();
                 string UnixFilePath = containerEnvironment.FN_LISTENER;
-                //Console.WriteLine("The Kestrel web server is binded to the "+UnixFilePath);
                 string SoftStorageFileOfTheUnixFilePath = containerEnvironment.SYMBOLIC_LINK;
-                Syscall.chmod(
-                    UnixFilePath,
-                    FilePermissions.S_IRUSR | FilePermissions.S_IWUSR | FilePermissions.S_IXUSR |
-                    FilePermissions.S_IRGRP | FilePermissions.S_IWGRP | FilePermissions.S_IXGRP |
-                    FilePermissions.S_IROTH | FilePermissions.S_IWOTH | FilePermissions.S_IXOTH
-                );
                 Syscall.symlink(UnixFilePath,SoftStorageFileOfTheUnixFilePath);
                 Syscall.chmod(
                     SoftStorageFileOfTheUnixFilePath,
@@ -64,6 +48,9 @@ namespace FDK
                     FilePermissions.S_IRGRP | FilePermissions.S_IWGRP | FilePermissions.S_IXGRP |
                     FilePermissions.S_IROTH | FilePermissions.S_IWOTH | FilePermissions.S_IXOTH
                 );
+                CreateHttpRequest.HttpRequestCreation(containerEnvironment);
+                Thread.Sleep(5);
+
             });
 
             applicationLifetime.ApplicationStopped.Register(() => 

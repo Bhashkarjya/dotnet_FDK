@@ -2,13 +2,84 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "Mono.Posix-4.5/4.5.0": {
+      "Mono.Posix.NETStandard/1.0.0": {
         "type": "package",
         "compile": {
-          "lib/net45/Mono.Posix.dll": {}
+          "ref/netstandard2.0/Mono.Posix.NETStandard.dll": {}
         },
-        "runtime": {
-          "lib/net45/Mono.Posix.dll": {}
+        "runtimeTargets": {
+          "runtimes/linux-arm/lib/netstandard2.0/Mono.Posix.NETStandard.dll": {
+            "assetType": "runtime",
+            "rid": "linux-arm"
+          },
+          "runtimes/linux-arm/native/libMonoPosixHelper.so": {
+            "assetType": "native",
+            "rid": "linux-arm"
+          },
+          "runtimes/linux-arm64/lib/netstandard2.0/Mono.Posix.NETStandard.dll": {
+            "assetType": "runtime",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-arm64/native/libMonoPosixHelper.so": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-armel/lib/netstandard2.0/Mono.Posix.NETStandard.dll": {
+            "assetType": "runtime",
+            "rid": "linux-armel"
+          },
+          "runtimes/linux-armel/native/libMonoPosixHelper.so": {
+            "assetType": "native",
+            "rid": "linux-armel"
+          },
+          "runtimes/linux-x64/lib/netstandard2.0/Mono.Posix.NETStandard.dll": {
+            "assetType": "runtime",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libMonoPosixHelper.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x86/lib/netstandard2.0/Mono.Posix.NETStandard.dll": {
+            "assetType": "runtime",
+            "rid": "linux-x86"
+          },
+          "runtimes/linux-x86/native/libMonoPosixHelper.so": {
+            "assetType": "native",
+            "rid": "linux-x86"
+          },
+          "runtimes/osx/lib/netstandard2.0/Mono.Posix.NETStandard.dll": {
+            "assetType": "runtime",
+            "rid": "osx"
+          },
+          "runtimes/osx/native/libMonoPosixHelper.dylib": {
+            "assetType": "native",
+            "rid": "osx"
+          },
+          "runtimes/win-x64/lib/netstandard2.0/Mono.Posix.NETStandard.dll": {
+            "assetType": "runtime",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/MonoPosixHelper.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libMonoPosixHelper.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/lib/netstandard2.0/Mono.Posix.NETStandard.dll": {
+            "assetType": "runtime",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/MonoPosixHelper.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/libMonoPosixHelper.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
         }
       },
       "Newtonsoft.Json/13.0.1": {
@@ -23,16 +94,36 @@
     }
   },
   "libraries": {
-    "Mono.Posix-4.5/4.5.0": {
-      "sha512": "QMynhYKbgqz/FiXUeP3+RL8eSPnYIqD3bZcGJ2oOOZQ0yr+BVRMuw40c2Id6s1dg7l8Ei+mdUD77xOdaXGHlqA==",
+    "Mono.Posix.NETStandard/1.0.0": {
+      "sha512": "vSN/L1uaVwKsiLa95bYu2SGkF0iY3xMblTfxc8alSziPuVfJpj3geVqHGAA75J7cZkMuKpFVikz82Lo6y6LLdA==",
       "type": "package",
-      "path": "mono.posix-4.5/4.5.0",
+      "path": "mono.posix.netstandard/1.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "lib/net45/Mono.Posix.dll",
-        "mono.posix-4.5.4.5.0.nupkg.sha512",
-        "mono.posix-4.5.nuspec"
+        "lib/net40/Mono.Posix.NETStandard.dll",
+        "mono.posix.netstandard.1.0.0.nupkg.sha512",
+        "mono.posix.netstandard.nuspec",
+        "ref/net40/Mono.Posix.NETStandard.dll",
+        "ref/netstandard2.0/Mono.Posix.NETStandard.dll",
+        "runtimes/linux-arm/lib/netstandard2.0/Mono.Posix.NETStandard.dll",
+        "runtimes/linux-arm/native/libMonoPosixHelper.so",
+        "runtimes/linux-arm64/lib/netstandard2.0/Mono.Posix.NETStandard.dll",
+        "runtimes/linux-arm64/native/libMonoPosixHelper.so",
+        "runtimes/linux-armel/lib/netstandard2.0/Mono.Posix.NETStandard.dll",
+        "runtimes/linux-armel/native/libMonoPosixHelper.so",
+        "runtimes/linux-x64/lib/netstandard2.0/Mono.Posix.NETStandard.dll",
+        "runtimes/linux-x64/native/libMonoPosixHelper.so",
+        "runtimes/linux-x86/lib/netstandard2.0/Mono.Posix.NETStandard.dll",
+        "runtimes/linux-x86/native/libMonoPosixHelper.so",
+        "runtimes/osx/lib/netstandard2.0/Mono.Posix.NETStandard.dll",
+        "runtimes/osx/native/libMonoPosixHelper.dylib",
+        "runtimes/win-x64/lib/netstandard2.0/Mono.Posix.NETStandard.dll",
+        "runtimes/win-x64/native/MonoPosixHelper.dll",
+        "runtimes/win-x64/native/libMonoPosixHelper.dll",
+        "runtimes/win-x86/lib/netstandard2.0/Mono.Posix.NETStandard.dll",
+        "runtimes/win-x86/native/MonoPosixHelper.dll",
+        "runtimes/win-x86/native/libMonoPosixHelper.dll"
       ]
     },
     "Newtonsoft.Json/13.0.1": {
@@ -65,7 +156,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "Mono.Posix-4.5 >= 4.5.0",
+      "Mono.Posix.NETStandard >= 1.0.0",
       "Newtonsoft.Json >= 13.0.1"
     ]
   },
@@ -104,9 +195,9 @@
     "frameworks": {
       "netcoreapp3.1": {
         "dependencies": {
-          "Mono.Posix-4.5": {
+          "Mono.Posix.NETStandard": {
             "target": "Package",
-            "version": "[4.5.0, )"
+            "version": "[1.0.0, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",
@@ -134,17 +225,5 @@
         "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.410/RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Mono.Posix-4.5 4.5.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
-      "libraryId": "Mono.Posix-4.5",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    }
-  ]
+  }
 }

@@ -11,7 +11,8 @@ namespace FDK
             return Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>()
+                    webBuilder.UseKestrel()
+                              .UseStartup<Startup>()
                     .ConfigureKestrel(options =>
                     {
                         //Console.WriteLine(ctnEnv.FN_LISTENER);

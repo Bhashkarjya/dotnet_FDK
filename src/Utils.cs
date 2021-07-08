@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 
 namespace FDK
 {
@@ -8,9 +9,9 @@ namespace FDK
         private const string PREFIX = "Fn-";
         public static IHeaderDictionary GetFnSpecificHeaders(IHeaderDictionary headers){
             //when the header list is empty
-            if(headers.ContentLength == 0){
-                throw new ArgumentNullException(nameof(headers));
-            }
+            // if(headers.ContentLength == 0){
+            //     throw new ArgumentNullException(nameof(headers));
+            // }
             //We need to return only those headers which starts with the prefix "Fn-Headers"
             IHeaderDictionary FnDictionary = new HeaderDictionary();
             foreach(var item in headers)
@@ -21,7 +22,7 @@ namespace FDK
                     FnDictionary.Add(item.Key,item.Value);
                 }
             }
-            return new HeaderDictionary();
+            return FnDictionary;
         }
 
         public static IPEndPoint getTCPConnectionPoint()
@@ -30,9 +31,30 @@ namespace FDK
             return endpoint;
         }
 
-        public static void handle(Func<IRequestContext,string,string> function)
+        // public static void handle(Func<IRequestContext,string,string> function)
+        // {
+        //     function(new RequestContext(new IHttpContext()), "Charles");
+        // }
+
+        public static void ExecuteShellScript()
         {
-            function(new RequestContext(new HttpContextAccessor()), "Charles");
+            string filename = "./script.sh";
+            var arguments = "";
+            ProcessStartInfo proc = new ProcessStartInfo()
+            {
+                FileName = filename,
+                Arguments = arguments,
+                UseShellExecute=false,
+                RedirectStandardOutput= true,
+                CreateNoWindow = true
+
+            };
+            Process process = Process.Start(proc);
+            while(!process.StandardOutput.EndOfStream)
+            {
+                string result = process.StandardOutput.ReadLine();
+            }
+            process.WaitForExit();
         }
     }
 }

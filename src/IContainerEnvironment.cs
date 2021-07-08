@@ -32,6 +32,9 @@ namespace FDK
 
         string SYMBOLIC_LINK{get; set;}
 
+        // int FN_MEMORY{get; set;}
+        // int FN_TMPSIZE{get; set;}
+
 
 
     }
