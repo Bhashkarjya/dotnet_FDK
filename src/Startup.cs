@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System;
-using Mono.Unix.Native;
 using System.Threading;
 
 namespace FDK
@@ -39,6 +38,7 @@ namespace FDK
             app.UseMiddleware<ResponseMiddleware>();
             
             applicationLifetime.ApplicationStarted.Register(() => {
+<<<<<<< HEAD
                 string UnixFilePath = containerEnvironment.FN_LISTENER;
                 string SoftStorageFileOfTheUnixFilePath = containerEnvironment.SYMBOLIC_LINK;
                 Syscall.symlink(UnixFilePath,SoftStorageFileOfTheUnixFilePath);
@@ -48,16 +48,16 @@ namespace FDK
                     FilePermissions.S_IRGRP | FilePermissions.S_IWGRP | 
                     FilePermissions.S_IROTH | FilePermissions.S_IWOTH 
                 );
+=======
+>>>>>>> 4773ff5cebaa9e08fee4bad60aae195055075499
                 CreateHttpRequest.HttpRequestCreation(containerEnvironment);
-                Thread.Sleep(5);
-
             });
 
             applicationLifetime.ApplicationStopped.Register(() => 
             {
                 Console.WriteLine("Cleaning the sockets before shutting down the application");
-                File.Delete(containerEnvironment.FN_LISTENER);
-                File.Delete(containerEnvironment.SYMBOLIC_LINK);
+ //               File.Delete(containerEnvironment.FN_LISTENER);
+  //              File.Delete(containerEnvironment.SYMBOLIC_LINK);
             });
         }
     }

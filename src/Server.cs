@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
+using Mono.Unix.Native;
 
 namespace FDK
 {
@@ -15,23 +16,47 @@ namespace FDK
                               .UseStartup<Startup>()
                     .ConfigureKestrel(options =>
                     {
-                        //Console.WriteLine(ctnEnv.FN_LISTENER);
-                        //Console.WriteLine(ctnEnv.SYMBOLIC_LINK);
-                        //Cleaning up the sock file and the soft link to sock file, if it does not get deleted
-                        if(File.Exists(ctnEnv.FN_LISTENER))
-                        {
-                            File.Delete(ctnEnv.FN_LISTENER);
+
+                        if (!ctnEnv.FN_LISTENER.Contains("unix:")) {
+                          //...
+                          return;
                         }
-                        if(File.Exists(ctnEnv.SYMBOLIC_LINK))
+
+                        var socketPath = ctnEnv.FN_LISTENER.Replace("unix:", "");
+                        var socketDir = Path.GetDirectoryName(socketPath);
+                        var socketFile = Path.GetFileName(socketPath);
+                        var symlinkFile = $"phony-{socketFile}";
+                        
+                        var symlinkSocketPath = Path.Join(socketDir, symlinkFile);
+
+                        Console.WriteLine("Base Dir: {0}, File: {1}", socketDir, socketFile);
+
+                        //Cleaning up the sock file and the soft link to sock file, if it does not get deleted
+                        if(File.Exists(socketPath))
                         {
-                            File.Delete(ctnEnv.SYMBOLIC_LINK);
+                            File.Delete(socketPath);
+                        }
+                        if(File.Exists(symlinkSocketPath))
+                        {
+                            File.Delete(symlinkSocketPath);
                         }
                         Console.WriteLine("FN_LISTENER: {0}", ctnEnv.FN_LISTENER);
+<<<<<<< HEAD
                         options.ListenUnixSocket(ctnEnv.FN_LISTENER);
 
                         string sre = "Hello";
                         sre.Contains("T");
+=======
+                        options.ListenUnixSocket(symlinkSocketPath);
+>>>>>>> 4773ff5cebaa9e08fee4bad60aae195055075499
                         Console.WriteLine("Unix Domain Socket connected");
+
+                        Syscall.chmod(
+                            symlinkSocketPath,
+                            NativeConvert.FromOctalPermissionString ("0666")
+                        );
+
+                        Syscall.symlink(symlinkFile, socketPath);
                     });
                 });
         }
