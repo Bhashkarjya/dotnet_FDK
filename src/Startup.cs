@@ -44,9 +44,9 @@ namespace FDK
                 Syscall.symlink(UnixFilePath,SoftStorageFileOfTheUnixFilePath);
                 Syscall.chmod(
                     SoftStorageFileOfTheUnixFilePath,
-                    FilePermissions.S_IRUSR | FilePermissions.S_IWUSR | FilePermissions.S_IXUSR |
-                    FilePermissions.S_IRGRP | FilePermissions.S_IWGRP | FilePermissions.S_IXGRP |
-                    FilePermissions.S_IROTH | FilePermissions.S_IWOTH | FilePermissions.S_IXOTH
+                    FilePermissions.S_IRUSR | FilePermissions.S_IWUSR | 
+                    FilePermissions.S_IRGRP | FilePermissions.S_IWGRP | 
+                    FilePermissions.S_IROTH | FilePermissions.S_IWOTH 
                 );
                 CreateHttpRequest.HttpRequestCreation(containerEnvironment);
                 Thread.Sleep(5);

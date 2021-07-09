@@ -28,6 +28,9 @@ namespace FDK
                         }
                         Console.WriteLine("FN_LISTENER: {0}", ctnEnv.FN_LISTENER);
                         options.ListenUnixSocket(ctnEnv.FN_LISTENER);
+
+                        string sre = "Hello";
+                        sre.Contains("T");
                         Console.WriteLine("Unix Domain Socket connected");
                     });
                 });
