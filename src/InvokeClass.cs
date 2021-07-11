@@ -41,7 +41,6 @@ namespace FDK
             _returnType = _userFunction.ReturnParameter;
             //this is how we invoke the function
             var output = _userFunction.Invoke(functionInstance, null);
-            Console.WriteLine(_parameters.Length);
             Console.WriteLine("Reflection: {0}",output);
             Server.CreateHostBuilder(new ContainerEnvironment()).Build().Run();
         }

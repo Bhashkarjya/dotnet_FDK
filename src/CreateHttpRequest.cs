@@ -7,10 +7,10 @@ namespace FDK
 {
     public class CreateHttpRequest
     {
-        public static void HttpRequestCreation(IContainerEnvironment containerEnvironment)
+        public static void HttpRequestCreation()
         {
             var socket = new Socket(AddressFamily.Unix,SocketType.Stream, ProtocolType.IP);
-            var unixEndPoint = new UnixEndPoint(containerEnvironment.FN_LISTENER);
+            var unixEndPoint = new UnixEndPoint(Server._realSock);
             socket.Connect(unixEndPoint);
             var request = $"GET /getMyData?id=testIdValue "
             + "HTTP/1.1\r\n"
@@ -38,7 +38,7 @@ namespace FDK
                 if(String.IsNullOrWhiteSpace(s)==true || s=="\n")
                 continue;
                 header_count++;
-                //Console.WriteLine(header_count+")" + s);
+                Console.WriteLine(header_count+")" + s);
             }
         }
     }

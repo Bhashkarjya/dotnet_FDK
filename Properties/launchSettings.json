@@ -10,7 +10,7 @@
         "FN_NAME":"Happy_Smurfs",
         "FN_APP_ID":"XYZ_123",
         "FN_APP_NAME":"SleepyHead",
-        "FN_FORMAT":"http-Stream",
+        "FN_FORMAT":"http-stream",
         "FN_MEMORY":"128",
         "FN_TMPSIZE":"512",
         "SYMLINK":"/tmp/temp_api.sock"

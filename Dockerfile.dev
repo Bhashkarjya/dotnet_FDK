@@ -1,0 +1,7 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine as build-image
+WORKDIR /home/app
+RUN apk add curl alpine-sdk
+COPY . .
+# RUN dotnet test ./Tests/Tests.csproj
+RUN dotnet restore
+RUN dotnet publish ./FDK.csproj -o /publish/

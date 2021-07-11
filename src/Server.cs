@@ -6,9 +6,12 @@ using Mono.Unix.Native;
 
 namespace FDK
 {
-    class Server{
-        public static IHostBuilder CreateHostBuilder(IContainerEnvironment ctnEnv)
-        {   
+    public class Server{
+
+        public static string _phonySock, _realSock;
+        public static IHostBuilder CreateHostBuilder(IContainerEnvironment containerEnvironment)
+        { 
+            CheckFnFormat(containerEnvironment);
             return Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -17,48 +20,60 @@ namespace FDK
                     .ConfigureKestrel(options =>
                     {
 
-                        if (!ctnEnv.FN_LISTENER.Contains("unix:")) {
-                          //...
-                          return;
-                        }
-
-                        var socketPath = ctnEnv.FN_LISTENER.Replace("unix:", "");
-                        var socketDir = Path.GetDirectoryName(socketPath);
-                        var socketFile = Path.GetFileName(socketPath);
-                        var symlinkFile = $"phony-{socketFile}";
+                        string path = containerEnvironment.FN_LISTENER;
+                        string path_scheme = path.Substring(0,containerEnvironment.SOCKET_TYPE.Length);
+                        if(path_scheme != "unix")
+                            Console.WriteLine("Url scheme must be unix with a valid path, got {0}", path_scheme);
                         
-                        var symlinkSocketPath = Path.Join(socketDir, symlinkFile);
+                        string realSock = path.Replace("unix:",""); 
 
-                        Console.WriteLine("Base Dir: {0}, File: {1}", socketDir, socketFile);
-
-                        //Cleaning up the sock file and the soft link to sock file, if it does not get deleted
-                        if(File.Exists(socketPath))
+                        if(realSock=="")
                         {
-                            File.Delete(socketPath);
+                            Console.WriteLine("Real socket file cannot be empty {0}", realSock);
                         }
-                        if(File.Exists(symlinkSocketPath))
-                        {
-                            File.Delete(symlinkSocketPath);
-                        }
-                        Console.WriteLine("FN_LISTENER: {0}", ctnEnv.FN_LISTENER);
-<<<<<<< HEAD
-                        options.ListenUnixSocket(ctnEnv.FN_LISTENER);
-
-                        string sre = "Hello";
-                        sre.Contains("T");
-=======
-                        options.ListenUnixSocket(symlinkSocketPath);
->>>>>>> 4773ff5cebaa9e08fee4bad60aae195055075499
-                        Console.WriteLine("Unix Domain Socket connected");
-
-                        Syscall.chmod(
-                            symlinkSocketPath,
-                            NativeConvert.FromOctalPermissionString ("0666")
-                        );
-
-                        Syscall.symlink(symlinkFile, socketPath);
+                        string phonySock = Path.Join(Path.GetDirectoryName(realSock),Path.GetFileName(realSock)+".tmp");
+                        Console.WriteLine("PhonySock: {0}\nRealSock: {1}",phonySock,realSock);
+                        //DeleteFile(realSock);
+                        //DeleteFile(phonySock);
+                        _realSock=realSock;
+                        _phonySock=phonySock;
+                        options.ListenUnixSocket(phonySock);
                     });
                 });
+        }
+
+        private static void CheckFnFormat(IContainerEnvironment containerEnvironment)
+        {
+            if(containerEnvironment.FN_FORMAT=="" || containerEnvironment.FN_FORMAT!="http-stream")
+            {
+                Console.WriteLine("only http-stream format is supported, please set function.format=http-stream against your fn service");
+                System.Environment.Exit(0);
+            }
+        }
+
+        public static void SockPerm(string phonySock,string realSock)
+        {
+            if(Syscall.chmod(
+                phonySock,
+                //realSock,
+                NativeConvert.FromOctalPermissionString ("0666")
+            ) < 0)
+            {
+                //TODO- Use proper logging facilities
+                var error = Stdlib.GetLastError();
+                Console.WriteLine("Error setting file permissions: " + error);
+            }
+            if(Syscall.symlink(Path.GetFileName(phonySock),realSock)<0)
+            {
+                var error = Stdlib.GetLastError();
+                Console.WriteLine("Error in creating soft link of the UDS file: "+error);
+            }
+        }
+
+        private static void DeleteFile(string filename)
+        {
+            if(File.Exists(filename))
+                File.Delete(filename);
         }
     }
 }

@@ -16,9 +16,6 @@ namespace FDK
         {
             services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
             services.AddSingleton<IContainerEnvironment,ContainerEnvironment>();
-            //services.AddScoped<IRequestContext,RequestContext>();
-            //services.AddSingleton<IConstructFunc,ConstructFunc>();
-            //Console.WriteLine("Adding services in DI");
         }
 
         public void Configure(IApplicationBuilder app, 
@@ -38,26 +35,16 @@ namespace FDK
             app.UseMiddleware<ResponseMiddleware>();
             
             applicationLifetime.ApplicationStarted.Register(() => {
-<<<<<<< HEAD
-                string UnixFilePath = containerEnvironment.FN_LISTENER;
-                string SoftStorageFileOfTheUnixFilePath = containerEnvironment.SYMBOLIC_LINK;
-                Syscall.symlink(UnixFilePath,SoftStorageFileOfTheUnixFilePath);
-                Syscall.chmod(
-                    SoftStorageFileOfTheUnixFilePath,
-                    FilePermissions.S_IRUSR | FilePermissions.S_IWUSR | 
-                    FilePermissions.S_IRGRP | FilePermissions.S_IWGRP | 
-                    FilePermissions.S_IROTH | FilePermissions.S_IWOTH 
-                );
-=======
->>>>>>> 4773ff5cebaa9e08fee4bad60aae195055075499
-                CreateHttpRequest.HttpRequestCreation(containerEnvironment);
+                Console.WriteLine("The application is starting");
+                Server.SockPerm(Server._phonySock,Server._realSock);
+                //CreateHttpRequest.HttpRequestCreation();
             });
 
             applicationLifetime.ApplicationStopped.Register(() => 
             {
-                Console.WriteLine("Cleaning the sockets before shutting down the application");
- //               File.Delete(containerEnvironment.FN_LISTENER);
-  //              File.Delete(containerEnvironment.SYMBOLIC_LINK);
+                Console.WriteLine("The application is stopped");
+                //File.Delete(Server._phonySock);
+                File.Delete(Server._realSock);
             });
         }
     }

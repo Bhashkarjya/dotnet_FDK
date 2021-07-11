@@ -25,12 +25,6 @@ namespace FDK
             return FnDictionary;
         }
 
-        public static IPEndPoint getTCPConnectionPoint()
-        {
-            IPEndPoint endpoint = new IPEndPoint(0x2414188f, 8080);
-            return endpoint;
-        }
-
         // public static void handle(Func<IRequestContext,string,string> function)
         // {
         //     function(new RequestContext(new IHttpContext()), "Charles");
