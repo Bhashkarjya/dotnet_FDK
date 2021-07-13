@@ -1,0 +1,1 @@
+curl -X POST -H "Content-Type: application/json" -d "{"name": "Kevin", "age": 18}"  --unix-socket /tmp/api.sock http://localhost

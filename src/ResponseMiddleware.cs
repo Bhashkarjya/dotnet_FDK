@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System.Reflection;
+using System.IO;
 
 namespace FDK
 {
@@ -12,6 +12,7 @@ namespace FDK
         private readonly RequestDelegate _next;
         private IRequestContext _ctx;
         private IHttpContextAccessor _httpContextAccessor;
+        private FunctionInput _input;
 
         public IHeaderDictionary ResponseHeaders{ get; } = new HeaderDictionary();
         public ResponseMiddleware(RequestDelegate next,
@@ -19,23 +20,18 @@ namespace FDK
                                 // IConstructFunc constructFunc
                                 )
         {
-            // _function = constructFunc.NewFunction();
             _next = next;
-            //_ctx = ctx;
             _httpContextAccessor = httpContextAccessor;
-            Console.WriteLine("Response Middleware");
         }
 
         //This is the entry point of the middleware. It searches for a method named Invoke or InvokeAsync and implements that method.
         public async Task InvokeAsync(HttpContext context)
         {
             _ctx = new RequestContext(context);
-            Console.WriteLine("Invoke Async Operation");
-            //await context.Response.WriteAsync("Response Body Middleware has been triggered");
+            _input = new FunctionInput(_ctx,context);
             var functionExecutionResult = UserFunctionRun();
-            //PrintRequestHeaders(context);
-            //PrintResponseHeaders(context);
-            await ClassifyResult.Create(functionExecutionResult,context);
+            PrintRequestHeaders(context);
+            await ClassifyResult.Create(functionExecutionResult,context,_ctx);
         }
 
         private object UserFunctionRun()
@@ -45,28 +41,30 @@ namespace FDK
             var timeLeft = CalculateTimeLeft();
             if(timeLeft == null)
             {
-                _httpContextAccessor.HttpContext.Response.StatusCode = StatusCodes.Status200OK;
-                return InvokeClass.RunUserFunction();
+                _httpContextAccessor.HttpContext.Response.StatusCode = StatusCodes.Status504GatewayTimeout;
+                return InvokeClass.RunUserFunction(_ctx,_input);
             }
             tokenSource.Cancel();
-            _httpContextAccessor.HttpContext.Response.StatusCode = StatusCodes.Status504GatewayTimeout;
-            return InvokeClass.RunUserFunction();
+            _httpContextAccessor.HttpContext.Response.StatusCode = StatusCodes.Status200OK;
+            return InvokeClass.RunUserFunction(_ctx,_input);
         }
 
-        private TimeSpan? CalculateTimeLeft()
+        private double? CalculateTimeLeft()
         {
-            // var deadLine = _ctx.Deadline();
-            // Console.WriteLine(DateTime.Now);
-            // if(deadLine == null)
-            //     return null;
-            // var timeLeft = deadLine - DateTime.Now;
-            // if(timeLeft.TotalSeconds < 0)
-            //     return null;
-            // return timeLeft;
-            return null;
+            var deadLine = _ctx.Deadline();
+            //When you are running locally, the request header won't inject the Fn-Deadline, so we are taking a hard coded DateTime value.
+            DateTime date1 = new DateTime(1000,1,1);
+            if(deadLine == date1)
+                return null;
+            if(deadLine == null)
+                return null;
+            var timeLeft = (deadLine - DateTime.Now).TotalSeconds;
+            if(timeLeft < 0)
+                return null;
+            return timeLeft;
         }
 
-        private static void PrintRequestHeaders(HttpContext context)
+        public static void PrintRequestHeaders(HttpContext context)
         {
             Console.WriteLine("****Request Headers ****");
             try{
@@ -77,17 +75,23 @@ namespace FDK
                     header_count++;
                     Console.WriteLine(header_count+")" +  h.Key+":"+h.Value);
                 }
+                try{
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine("{0} {1}",e.Source,e.Message);
+                }
             }
             catch{
                 Console.WriteLine("Couldnt't catch headers");
             }
         }
 
-        private static void PrintResponseHeaders(HttpContext context)
+        public static void PrintResponseHeaders(HttpResponse context)
         {
             Console.WriteLine("**** Response Headers ****");
             try{
-                var headers = context.Response.Headers;
+                var headers = context.Headers;
                 int header_count = 0;
                 foreach(var h in headers)
                 {

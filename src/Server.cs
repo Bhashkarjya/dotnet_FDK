@@ -32,11 +32,10 @@ namespace FDK
                             Console.WriteLine("Real socket file cannot be empty {0}", realSock);
                         }
                         string phonySock = Path.Join(Path.GetDirectoryName(realSock),Path.GetFileName(realSock)+".tmp");
-                        Console.WriteLine("PhonySock: {0}\nRealSock: {1}",phonySock,realSock);
-                        //DeleteFile(realSock);
-                        //DeleteFile(phonySock);
                         _realSock=realSock;
                         _phonySock=phonySock;
+                        DeleteFile(_realSock);
+                        DeleteFile(_phonySock);
                         options.ListenUnixSocket(phonySock);
                     });
                 });

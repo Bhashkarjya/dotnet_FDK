@@ -8,15 +8,9 @@ namespace FDK
     public static class Utils{
         private const string PREFIX = "Fn-";
         public static IHeaderDictionary GetFnSpecificHeaders(IHeaderDictionary headers){
-            //when the header list is empty
-            // if(headers.ContentLength == 0){
-            //     throw new ArgumentNullException(nameof(headers));
-            // }
-            //We need to return only those headers which starts with the prefix "Fn-Headers"
             IHeaderDictionary FnDictionary = new HeaderDictionary();
             foreach(var item in headers)
             {
-                Console.WriteLine(item.Key+":"+item.Value);
                 if(item.Key.StartsWith(PREFIX))
                 {
                     FnDictionary.Add(item.Key,item.Value);
@@ -24,11 +18,6 @@ namespace FDK
             }
             return FnDictionary;
         }
-
-        // public static void handle(Func<IRequestContext,string,string> function)
-        // {
-        //     function(new RequestContext(new IHttpContext()), "Charles");
-        // }
 
         public static void ExecuteShellScript()
         {

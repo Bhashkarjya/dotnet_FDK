@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 
-
 namespace FDK
 {
     public class RawResult : ConstructResult
@@ -17,8 +16,11 @@ namespace FDK
         }
         public override async Task WriteResultBody(HttpResponse response)
         {
-            Console.WriteLine("has the code reached this part");
             await response.WriteAsync(_res,Encoding);
+            DateTime responseTime = DateTime.Now;
+            double timeTaken = (responseTime-Startup.startTime).TotalSeconds;
+            string timeTakenString = "\nTime taken to execute " + Math.Round(timeTaken,3).ToString()+" seconds";
+            await response.WriteAsync(timeTakenString,Encoding);
         }
     }
 

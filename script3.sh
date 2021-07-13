@@ -1,0 +1,1 @@
+curl -X POST -H "Content-Type: application/xml" -d "<Name>Bhashkarjya</Name><Age>18</Age>" --unix-socket /tmp/api.sock http://localhost

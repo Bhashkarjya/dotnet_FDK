@@ -8,9 +8,10 @@ namespace FDK
     public class InvokeClass
     {
         public static IServiceCollection services;
-        private static string functionName;
+        private static string _functionName="";
         public static Type _functionType;
         public static object _functionInstance;
+        private static short Flag = 0;
 
         public static MethodInfo _userFunction;
 
@@ -21,32 +22,48 @@ namespace FDK
             //This is the entry point where the user function will first enter the FDK
             _functionType = functionType;
             //Getting an array of methods
-            MethodInfo[] methodInfos =  _functionType.GetMethods();
-            //Console.WriteLine(functionName);
+            MethodInfo[] methodInfos =  _functionType.GetMethods(BindingFlags.Public | BindingFlags.Static);
             foreach(MethodInfo val in methodInfos)
             {
-                //will create a shell script to change the name of HelloWorld to the name of the function
-                if(val.Name =="HelloWorld")
+                if(val.Name !="Equals" && val.Name!="GetHashCode" && val.Name!="GetType" && val.Name!="Tostring")
                 {
-                    functionName = val.Name;
+                    _functionName = val.Name;
                     break;
                 }
             }
+            if(String.IsNullOrEmpty(_functionName))
+            {
+                Console.WriteLine("No user defined public and static function was found");
+                Flag=1;
+            }
+            if(Flag==1)
+            {
+                methodInfos =_functionType.GetMethods(BindingFlags.Instance| BindingFlags.Public);
+                foreach(MethodInfo val in methodInfos)
+                {
+                    if(val.Name !="Equals" && val.Name!="GetHashCode" && val.Name!="GetType" && val.Name!="Tostring")
+                    {
+                        _functionName = val.Name;
+                        break;
+                    }
+                }
+            }
+            if(String.IsNullOrEmpty(_functionName))
+                Console.WriteLine("No user defined function was found");
             _functionInstance = functionInstance;
             //get the user's function
-            _userFunction = _functionType.GetMethod(functionName);
+            _userFunction = _functionType.GetMethod(_functionName);
             //get the array of parameters
             _parameters = _userFunction.GetParameters();
             //get the return type of the user's function
             _returnType = _userFunction.ReturnParameter;
             //this is how we invoke the function
-            var output = _userFunction.Invoke(functionInstance, null);
-            Console.WriteLine("Reflection: {0}",output);
+            // var output = _userFunction.Invoke(functionInstance, null);
             Server.CreateHostBuilder(new ContainerEnvironment()).Build().Run();
         }
 
         //Call this function to get the user function code
-        public static object RunUserFunction()
+        public static object RunUserFunction(IRequestContext ctx, FunctionInput input)
         {
             if(_parameters.Length==0)
             {
@@ -55,10 +72,11 @@ namespace FDK
             else
             {
                 object[] listOfParameters = new object[_parameters.Length];
-                for(int i = 0; i < _parameters.Length; i++)
-                {
-                    // Assign the parameters to the listOfParameters array
-                }
+                //The first parameter is the Request context.
+                listOfParameters[0]=ctx;
+                //The second parameter is the Request data.
+                // When the user can inject this Request data by making a POST request using "CURL" or by echo "Value"
+                listOfParameters[1]=input;
                 return _userFunction.Invoke(_functionInstance,listOfParameters);
             }
         }

@@ -6,14 +6,18 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System;
-using System.Threading;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace FDK
 {
     public class Startup
     {
+        public static DateTime startTime;
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<KestrelServerOptions>(options =>{
+                options.AllowSynchronousIO = true;
+            });
             services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
             services.AddSingleton<IContainerEnvironment,ContainerEnvironment>();
         }
@@ -24,7 +28,6 @@ namespace FDK
                               IHostApplicationLifetime applicationLifetime, 
                               IHttpContextAccessor httpContextAccessor, 
                               IContainerEnvironment containerEnvironment
-                            //   IConstructFunc constructFunc
                               )
         {
             if (env.IsDevelopment())
@@ -35,16 +38,15 @@ namespace FDK
             app.UseMiddleware<ResponseMiddleware>();
             
             applicationLifetime.ApplicationStarted.Register(() => {
-                Console.WriteLine("The application is starting");
                 Server.SockPerm(Server._phonySock,Server._realSock);
-                //CreateHttpRequest.HttpRequestCreation();
+                startTime = DateTime.Now;
             });
 
             applicationLifetime.ApplicationStopped.Register(() => 
             {
-                Console.WriteLine("The application is stopped");
-                //File.Delete(Server._phonySock);
+                //Cleaning up the UDS and the symlink
                 File.Delete(Server._realSock);
+                File.Delete(Server._phonySock);
             });
         }
     }

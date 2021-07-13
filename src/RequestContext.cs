@@ -13,15 +13,7 @@ namespace FDK
             try{
                 _httpRequest = context.Request;
                 headers = _httpRequest.Headers;
-                Console.WriteLine(headers);
-                // Start logging this request from environment variables and headers
-                //FDK.Log.Logger.EnableFromHeaders(headers);
                 fn_headers = Utils.GetFnSpecificHeaders(headers);
-                foreach(var h in fn_headers)
-                {
-                    Console.WriteLine(h.Key+":"+h.Value);
-                }
-                Console.WriteLine("Response Body worked");
             }
             catch(NullReferenceException e)
             {
@@ -62,6 +54,12 @@ namespace FDK
 
         public DateTime Deadline()
         {
+            // if(fn_headers.Contains("Fn-Deadline"))
+            if(String.IsNullOrEmpty(fn_headers["Fn-Deadline"]))
+            {
+                DateTime date = new DateTime(1000,1,1);
+                return date;
+            }
             return DateTime.Parse(fn_headers["Fn-Deadline"]);
         }
 

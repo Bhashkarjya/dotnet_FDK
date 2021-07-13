@@ -16,17 +16,15 @@ namespace FDK
 
         public int HttpStatus {get; set;} = StatusCodes.Status200OK;
 
-        public async Task WriteResult(HttpResponse response)
+        public async Task WriteResult(HttpResponse response, IRequestContext ctx)
         {
-            response.ContentType = ContentType;
-            if(HttpStatus != StatusCodes.Status200OK)
-            {
-                response.Headers["Fn-Http-Status"] = HttpStatus.ToString();
-            }
+            response.ContentType = ctx.ContentType();
+            response.Headers["Fn-Http-Status"] = HttpStatus.ToString();
             foreach(var header in ResponseHeaders)
             {
                 response.Headers["Fn-Http-H-" + header.Key] = header.Value;
             }
+            ResponseMiddleware.PrintResponseHeaders(response);
             await WriteResultBody(response);
         }
 
