@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace FDK
 {
-    public class Metadata //currently deprecated
+    public class Metadata //currently not in use
     {
         public static string _userNamespace;
         public static string _userClassName;

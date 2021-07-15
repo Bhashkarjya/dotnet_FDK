@@ -1,19 +1,19 @@
 using System;
 using Microsoft.AspNetCore.Http;
 
-namespace FDK.Log
+namespace FDK
 {
     public static class Logger
     {
         public static void logFrameHeader(IHeaderDictionary headers) {
           
           string framer = Environment.GetEnvironmentVariable("FN_LOGFRAME_NAME");
-          if (framer.Length == 0) {
+          if (framer== null || framer.Length == 0) {
             return;
           }
 
           string valueSrc = Environment.GetEnvironmentVariable("FN_LOGFRAME_HDR");
-          if (valueSrc.Length == 0) {
+          if (valueSrc == null || valueSrc.Length == 0) {
             return;
           }
 

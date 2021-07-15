@@ -57,8 +57,6 @@ namespace FDK
             _parameters = _userFunction.GetParameters();
             //get the return type of the user's function
             _returnType = _userFunction.ReturnParameter;
-            //this is how we invoke the function
-            // var output = _userFunction.Invoke(functionInstance, null);
             Server.CreateHostBuilder(new ContainerEnvironment()).Build().Run();
         }
 

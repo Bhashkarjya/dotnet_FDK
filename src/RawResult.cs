@@ -17,10 +17,6 @@ namespace FDK
         public override async Task WriteResultBody(HttpResponse response)
         {
             await response.WriteAsync(_res,Encoding);
-            DateTime responseTime = DateTime.Now;
-            double timeTaken = (responseTime-Startup.startTime).TotalSeconds;
-            string timeTakenString = "\nTime taken to execute " + Math.Round(timeTaken,3).ToString()+" seconds";
-            await response.WriteAsync(timeTakenString,Encoding);
         }
     }
 

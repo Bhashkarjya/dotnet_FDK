@@ -10,7 +10,7 @@ namespace UserFunction
         {
           try {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
-            Type functionType = executingAssembly.GetType("UserFunction.Example");
+            Type functionType = executingAssembly.GetType("UserFunction.JsonExample");
             object functionInstance = Activator.CreateInstance(functionType);
             InvokeClass.HandlerFunc(functionType,functionInstance);
           } catch (Exception e) {

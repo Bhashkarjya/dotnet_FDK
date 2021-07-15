@@ -54,7 +54,6 @@ namespace FDK
         {
             if(Syscall.chmod(
                 phonySock,
-                //realSock,
                 NativeConvert.FromOctalPermissionString ("0666")
             ) < 0)
             {

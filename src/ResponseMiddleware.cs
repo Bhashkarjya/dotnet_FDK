@@ -17,7 +17,6 @@ namespace FDK
         public IHeaderDictionary ResponseHeaders{ get; } = new HeaderDictionary();
         public ResponseMiddleware(RequestDelegate next,
                                 IHttpContextAccessor httpContextAccessor
-                                // IConstructFunc constructFunc
                                 )
         {
             _next = next;
@@ -27,6 +26,7 @@ namespace FDK
         //This is the entry point of the middleware. It searches for a method named Invoke or InvokeAsync and implements that method.
         public async Task InvokeAsync(HttpContext context)
         {
+            Logger.logFrameHeader(context.Request.Headers);
             _ctx = new RequestContext(context);
             _input = new FunctionInput(_ctx,context);
             var functionExecutionResult = UserFunctionRun();

@@ -15,8 +15,5 @@ namespace FDK
         // public Int32 FN_MEMORY { get; set; } = int.Parse(Environment.GetEnvironmentVariable("FN_MEMORY"));
         // public Int32 FN_TMPSIZE { get; set; } = int.Parse(Environment.GetEnvironmentVariable("FN_TMPSIZE"));
         public string SOCKET_TYPE{get; set;} = "Unix";
-
-        // public int FN_MEMORY{get; set;} = int.Parse(Environment.GetEnvironmentVariable("FN_MEMORY"));
-        // public int FN_TMPSIZE{get; set;} = int.Parse(Environment.GetEnvironmentVariable("FN_TMPSIZE"));
     }
 }

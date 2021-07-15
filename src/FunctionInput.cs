@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Xml.Serialization;
 
 namespace FDK
 {
     public class FunctionInput
     {
         private static HttpContext _context;
+
+        private static string _input;
         private static IRequestContext _ctx;
 
         private static Dictionary<string,string> _dict;
@@ -17,76 +19,73 @@ namespace FDK
         {
             _ctx = ctx;
             _context = context;
-            string input = ClassifyInput(_context);
+            _input = AsString();
             string ContentType = _ctx.ContentType();
-            _dict = ConvertToDictionary(input);
-            // switch(ContentType)
-            // {
-            //     case("text/plain"):
-            //     case("application/x-www-form-urlencoded"):
-            //     _dict = ConvertToDictionary(input);
-            //     break;
-            //     default:
-            //     break;
-            // }
+            if(string.IsNullOrEmpty(ContentType))
+            {
+                Console.WriteLine("Content-Type has not been defined");
+            }
+            ClassifyInput(ContentType);
         }
-        // The input is parsed depending upon the Content-Type of the Request Body.
-        // Currently the FDK supports three types of Content-Types: text/plain, application/json, application/xml
-        public string ClassifyInput(HttpContext context)
+        private void ClassifyInput(string ContentType)
         {
-            using (var reader = new StreamReader(context.Request.Body))
+            // The input is parsed depending upon the Content-Type of the Request Body.
+            // Currently the FDK supports three types of Content-Types: text/plain, application/x-www-form-urlencoded,
+            // application/json
+            switch(ContentType)
+            {
+                case("application/json"):
+                break;
+                case("text/plain"):
+                case("application/x-www-form-urlencoded"):
+                default:
+                _dict = ConvertToDictionary(_input);
+                break;
+            }
+        }
+
+        //Reads the Request body stream and returns a string.
+        private string AsString()
+        {
+            using(var reader = new StreamReader(_context.Request.Body))
             {
                 string body = reader.ReadToEnd();
                 return body;
             }
-            // string contentType = _ctx.ContentType();
-            // switch(contentType)
-            // {
-            //     case("text/plain"):
-            //     case("application/x-www-form-urlencoded"):
-            //         using (var reader = new StreamReader(context.Request.Body))
-            //         {
-            //             string body = reader.ReadToEnd();
-            //             return body;
-            //         }
-            //     case("application/json"):
-            //         using(var reader = new StreamReader(context.Request.Body))
-            //         {
-            //             string body = reader.ReadToEnd();
-            //             return body;
-            //         }
-            //     case("application/xml"):
-            //     using(var reader = new StreamReader(context.Request.Body))
-            //     {
-            //         string body = reader.ReadToEnd();
-            //         return body;
-            //     }
-            //     default:
-            //         return "";
-            // }
         }
 
-        private string ConvertToJsonString(string body)
+        //Getter method to access the Request body as a stream
+        public string GetString()
         {
-            char [] delimiters = {',',' ','(',')','\'' };
-            string[] arguments = body.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            string jsonString = ConstructJsonString(arguments);
-            return jsonString;
+            return _input;
         }
 
-        private string ConstructJsonString(string[] arguments)
+        //Json object is deserialized into a .NET object.
+        public T AccessJsonInput<T>() where T : class
         {
-            string jsonString = "{";
-            int argCount = 1;
-            foreach(string arg in arguments)
-            {
-                jsonString=jsonString+"arg"+argCount.ToString()+": "+arg+", ";
-                argCount++;
+            try{
+                return JsonConvert.DeserializeObject<T>(_input);
             }
-            jsonString = jsonString.Remove(jsonString.Length-2);
-            return jsonString+"}";
+            catch(Exception e)
+            {
+                // Statement will return an exception if the input format is not a valid JSON object.
+                Console.WriteLine(e.Message);
+            }
+            return null;
         }
 
+        //Deserialization of the XML body. Currently, it is not used since the FDK does not support XML format as of now.
+        public List<T> AccessXmlInput<T>() where T : class
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<T>),new XmlRootAttribute("Employees"));
+            using(var reader = new StreamReader(_input))
+            {
+                return (List<T>)serializer.Deserialize(reader);
+            }
+        }
+
+        //ConvertToDictionary is called when the input is given in raw data or text/plain format. It splits the different arguments
+        // and stores them in a KeyValuePair fashion in a dictionary. The keys are by default named as "arg1" , "arg2" and so on.
         private Dictionary<string,string> ConvertToDictionary(string input)
         {
             char [] delimiters = {',',' ','(',')','\'' };
@@ -98,13 +97,10 @@ namespace FDK
                 argCount++;
                 dict.Add("arg"+argCount.ToString(),arg);
             }
-            foreach(KeyValuePair<string,string>  element in dict)
-            {
-                Console.WriteLine("{0} : {1}",element.Key, element.Value);
-            }
             return dict;
         }
 
+        // Returns the value stored in the dictionary corresponding to the key given as argument.
         public string GetValue(string argument)
         {
             if(_dict.ContainsKey(argument) == false)

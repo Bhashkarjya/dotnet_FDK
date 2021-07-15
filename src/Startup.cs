@@ -38,8 +38,8 @@ namespace FDK
             app.UseMiddleware<ResponseMiddleware>();
             
             applicationLifetime.ApplicationStarted.Register(() => {
+                //Giving "0666" permissions to the UDS file and setting up a soft link.
                 Server.SockPerm(Server._phonySock,Server._realSock);
-                startTime = DateTime.Now;
             });
 
             applicationLifetime.ApplicationStopped.Register(() => 
