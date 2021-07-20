@@ -1,1 +1,0 @@
-curl --unix-socket /tmp/api.sock http://localhost
